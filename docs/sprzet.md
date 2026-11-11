@@ -47,6 +47,28 @@ Więcej w [`hardware/README.md`](../hardware/README.md).
 
 ![Podgląd DXF](../hardware/Borsuk_v2_podglad.svg)
 
+## Sterownik silników – Waveshare Motor Driver for micro:bit
+
+Dokumentacja producenta: [Waveshare Wiki – Motor Driver for micro:bit](https://www.waveshare.com/wiki/Motor_Driver_for_micro:bit)
+
+| Parametr | Wartość |
+|---|---|
+| Zasilanie (zacisk VIN) | **6–12 V** (2 × 18650 = 7,4–8,4 V ✔) |
+| Sterownik silników | TB6612FNG, 2 kanały |
+| Zasilanie serw | 5 V (stabilizator 5 V, do 3 A) |
+| Logika / micro:bit | 3,3 V (stabilizator RT9193 – płytka zasila micro:bita) |
+| Otwory montażowe | Ø3 mm (śruby M3 × 10) |
+| Wymiary | 65 × 36 mm |
+
+Złącza na płytce:
+
+| Złącze | Opis |
+|---|---|
+| VIN / GND | zasilanie z koszyka akumulatorów |
+| A1 / A2 | silnik A (lewy) |
+| B1 / B2 | silnik B (prawy) |
+| S0 / S1 / S2 | 3-pinowe złącza serw: sygnał (P0 / P1 / P2) + **5 V** + GND |
+
 ## Połączenia – robot
 
 micro:bit wkłada się w złącze krawędziowe sterownika Waveshare. Piny są stałe:
@@ -58,7 +80,7 @@ micro:bit wkłada się w złącze krawędziowe sterownika Waveshare. Piny są st
 | Serwo S0 (v1: lewe koło) | P0 |
 | Serwo S1 (v1: prawe koło) | P1 |
 | Serwo S2 (np. „głowa”, chwytak) | P2 |
-| Czujnik odległości TRIG / ECHO | wolne piny złącza płytki rozszerzeń (do uzupełnienia); w bibliotece domyślnie P1 / P2 |
+| Czujnik odległości TRIG / ECHO | w wersji v2 zwykle złącza S1 / S2 = **P1 / P2** (domyślne w bibliotece) – do potwierdzenia |
 
 Wolne piny do czujników: P1, P2 (gdy nie używasz S1/S2), P5 i P11 (przyciski A/B),
 P19/P20 (I²C), a po wyłączeniu wyświetlacza (`led.enable(false)`) także P3, P4, P6, P7, P9, P10.
@@ -71,7 +93,16 @@ Sygnały TRIG i ECHO podłącz do wolnych pinów na złączu płytki sterownika,
 ustaw te same piny blokiem `czujnik odległości TRIG … ECHO …`
 (MicroPython: `robot.set_distance_sensor(trig, echo)`).
 
-> *Do uzupełnienia: numery pinów TRIG/ECHO używane w robotach FabLabu.*
+W robocie v2 (silniki DC) złącza serw S1 i S2 są wolne, więc najprościej podłączyć
+TRIG do sygnału S1 (**P1**), a ECHO do sygnału S2 (**P2**). Tak ustawiona jest biblioteka,
+więc wtedy nie trzeba nic konfigurować.
+
+> **Uwaga:** środkowy pin złączy serw daje **5 V**, a nie 3,3 V. Jeśli zasilasz
+> czujnik z tego złącza, sprawdź, czy jego ECHO nie oddaje 5 V (miernikiem albo w
+> dokumentacji modułu). Najbezpieczniej zasilić RCW-0001 z **3,3 V** micro:bita
+> (pin 3V na złączu krawędziowym), a z S1/S2 brać tylko sygnały i GND.
+
+> *Do potwierdzenia: czy roboty FabLabu mają czujnik na P1/P2 i skąd jest zasilany.*
 
 **Uwaga przy zamiennikach:** klasyczny **HC-SR04** wymaga 5 V i oddaje na ECHO sygnał
 **5 V**, który może **uszkodzić micro:bita** (wejścia tolerują maks. 3,6 V). Jeśli nie masz
@@ -119,8 +150,11 @@ Wejście zasilania: gniazdo DC **4,75–12 V** (stabilizator AMS1117 zasila micr
 
 ## Zasilanie
 
-- Robot: **2 × 18650 połączone szeregowo** (ok. 7,4 V, do 8,4 V po naładowaniu) do wejścia
-  zasilania sterownika Waveshare. Sterownik zasila silniki i micro:bita.
+- Robot: **2 × 18650 połączone szeregowo** (ok. 7,4 V, do 8,4 V po naładowaniu) do zacisku
+  **VIN** sterownika Waveshare (zakres 6–12 V). Sterownik zasila silniki, serwa (5 V)
+  i micro:bita (3,3 V).
+- Gdy napięcie akumulatorów spadnie poniżej ok. 6 V, sterownik przestaje działać
+  stabilnie – pora naładować ogniwa.
 - Używaj ogniw z zabezpieczeniem (PCB) i ładuj je ładowarką do Li-ion. Nie zostawiaj
   robota z włączonym zasilaniem bez nadzoru.
 - Gdy robot „resetuje się” przy ruszaniu, akumulatory są rozładowane.
