@@ -1,22 +1,22 @@
-// Robot jeździ sam i omija przeszkody (czujnik ultradźwiękowy).
-// Ustaw piny, do których podłączony jest Twój czujnik.
+// The robot drives on its own and avoids obstacles (ultrasonic sensor).
+// Set the pins your sensor is connected to.
 borsuk.setDistanceSensor(DigitalPin.P1, DigitalPin.P2)
-let jedzie = false
+let driving = false
 
 input.onButtonPressed(Button.A, function () {
-    jedzie = true
+    driving = true
 })
 input.onButtonPressed(Button.B, function () {
-    jedzie = false
+    driving = false
     borsuk.stop()
 })
 
 basic.forever(function () {
-    if (!jedzie) return
+    if (!driving) return
     if (borsuk.obstacleCloserThan(20)) {
         basic.showIcon(IconNames.Surprised)
         borsuk.driveFor(BorsukMove.Backward, 50, 400)
-        // losowo w lewo albo w prawo
+        // randomly left or right
         if (Math.randomBoolean()) {
             borsuk.driveFor(BorsukMove.Left, 50, 400)
         } else {

@@ -1,3 +1,5 @@
+[English](../radio-remote.md) | **Polski**
+
 # Sterowanie pilotem przez radio
 
 ```

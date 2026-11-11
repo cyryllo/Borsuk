@@ -1,6 +1,6 @@
-// Test pilota bez robota: wysyła odczyty joysticka i przycisków przez USB
-// (otwórz „Show console Device” w MakeCode). Wyświetlacz LED jest wyłączony,
-// bo dzieli piny z joystickiem – sygnalizacja tylko dźwiękiem.
+// Remote test without a robot: sends joystick and button readings over USB
+// (open "Show console Device" in MakeCode). The LED display is off because it
+// shares pins with the joystick – feedback is sound only.
 pilot.onKey(PilotKey.Up, function () { music.playTone(Note.C, 100) })
 pilot.onKey(PilotKey.Down, function () { music.playTone(Note.D, 100) })
 pilot.onKey(PilotKey.Left, function () { music.playTone(Note.E, 100) })

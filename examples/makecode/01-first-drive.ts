@@ -1,12 +1,12 @@
-// Pierwsza jazda: po wciśnięciu A robot jedzie do przodu, obraca się i wraca.
-// Robot v1 (serwa 360°)? Odkomentuj linię poniżej.
+// First drive: press A – the robot drives forward, turns around and comes back.
+// Robot v1 (360° servos)? Uncomment the line below.
 // borsuk.setDriveMode(BorsukDrive.Servos360)
 
 input.onButtonPressed(Button.A, function () {
     basic.showArrow(ArrowNames.North)
     borsuk.driveFor(BorsukMove.Forward, 60, 1500)
     basic.showArrow(ArrowNames.East)
-    borsuk.driveFor(BorsukMove.Right, 50, 700)   // dobierz czas tak, by obrót miał ~180°
+    borsuk.driveFor(BorsukMove.Right, 50, 700)   // adjust the time for a ~180° turn
     basic.showArrow(ArrowNames.North)
     borsuk.driveFor(BorsukMove.Forward, 60, 1500)
     basic.showIcon(IconNames.Happy)

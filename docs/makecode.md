@@ -1,111 +1,113 @@
-# Bloki MakeCode
+**English** | [Polski](pl/makecode.md)
 
-## Dodanie rozszerzenia
+# MakeCode blocks
 
-1. <https://makecode.microbit.org> → **Nowy projekt**.
-2. Koło zębate → **Rozszerzenia** (albo kategoria *Rozszerzenia* na dole listy bloków).
-3. Wklej `https://github.com/cyryllo/Borsuk` i kliknij znalezione rozszerzenie **borsuk**.
+## Adding the extension
 
-To samo rozszerzenie dodajesz w programie robota i w programie pilota.
-Rozszerzenie dodaje też *Radio* (jest potrzebne do pilota).
+1. <https://makecode.microbit.org> → **New project**.
+2. Gear icon → **Extensions** (or the *Extensions* category at the bottom of the block list).
+3. Paste `https://github.com/cyryllo/Borsuk` and click the **borsuk** extension that appears.
 
-Bloki mają polskie opisy. W widoku JavaScript/Python funkcje mają angielskie nazwy
-(podane niżej), np. `borsuk.drive(...)` / `borsuk.drive(...)`.
+Add the same extension to the robot's program and to the remote's program.
+The extension also adds *Radio* (needed for the remote).
 
----
-
-## Kategoria „Borsuk” (robot)
-
-### Jazda
-
-| Blok | Kod | Opis |
-|---|---|---|
-| jedź **[do przodu]** z prędkością **50** | `borsuk.drive(BorsukMove.Forward, 50)` | jedzie, dopóki go nie zatrzymasz; kierunki: do przodu, do tyłu, w lewo (obrót), w prawo (obrót); prędkość 0–100 % |
-| jedź **[do przodu]** z prędkością **50** przez **1000** ms | `borsuk.driveFor(move, speed, ms)` | jedzie przez podany czas i staje |
-| zatrzymaj robota | `borsuk.stop()` | |
-| koła: lewe **50** prawe **50** | `borsuk.tank(left, right)` | każde koło osobno, -100…100 (ujemne = do tyłu) – łuki, slalomy |
-| steruj jak joystickiem x **0** y **50** | `borsuk.steer(x, y)` | y = przód/tył, x = skręt, -100…100 |
-
-### Czujnik odległości
-
-| Blok | Kod | Opis |
-|---|---|---|
-| czujnik odległości TRIG **P1** ECHO **P2** | `borsuk.setDistanceSensor(trig, echo)` | wywołaj raz na początku; dla czujnika Grove wybierz ten sam pin dwa razy |
-| odległość (cm) | `borsuk.distance()` | 0 = brak odczytu (nic w zasięgu ~4 m) |
-| przeszkoda bliżej niż **20** cm | `borsuk.obstacleCloserThan(cm)` | prawda/fałsz; brak odczytu = brak przeszkody |
-
-Podłączenie czujnika RCW-0001 i uwagi o zamiennikach: [sprzęt](sprzet.md#czujnik-odległości-rcw-0001).
-
-### Silniki DC
-
-| Blok | Kod | Opis |
-|---|---|---|
-| silnik **A** kręć **do przodu** z prędkością **50** | `borsuk.motorRun(motor, dir, speed)` | pojedynczy silnik, 0–100 % |
-| zatrzymaj silnik **A** | `borsuk.motorStop(motor)` | |
-
-### Serwa
-
-| Blok | Kod | Opis |
-|---|---|---|
-| serwo **S2** ustaw kąt **90** | `borsuk.servoAngle(servo, angle)` | zwykłe serwo 0–180° |
-| serwo 360° **S0** kręć z prędkością **50** | `borsuk.servoSpin(servo, speed)` | serwo ciągłego obrotu, -100…100 |
-| zatrzymaj serwo **S0** | `borsuk.servoStop(servo)` | wyłącza sygnał (serwo 360° staje, zwykłe przestaje trzymać pozycję) |
-
-### Pilot radiowy (po stronie robota)
-
-| Blok | Kod | Opis |
-|---|---|---|
-| odbieraj sterowanie z pilota, grupa radiowa **1** | `borsuk.startRemote(group)` | robot sam jeździ joystickiem; staje po 0,5 s bez sygnału |
-| gdy na pilocie wciśnięto **[góra]** | `borsuk.onRemoteKey(key, handler)` | zdarzenie |
-| na pilocie wciśnięty **[góra]** | `borsuk.remoteKeyPressed(key)` | prawda/fałsz |
-| joystick pilota oś **X** | `borsuk.remoteAxis(axis)` | -100…100 |
-| pilot połączony | `borsuk.isRemoteConnected()` | |
-| jazda joystickiem pilota **wł./wył.** | `borsuk.setRemoteAutoDrive(on)` | wyłącz, gdy chcesz sam programować reakcję robota |
-
-### Ustawienia
-
-| Blok | Kod | Opis |
-|---|---|---|
-| napęd robota: **silniki DC (v2) / serwa 360° (v1)** | `borsuk.setDriveMode(mode)` | domyślnie silniki DC |
-| odwróć kierunek silnika **A** wł. | `borsuk.reverseMotor(motor, on)` | gdy koło kręci się odwrotnie |
-| zamień lewe i prawe koło wł. | `borsuk.swapSides(on)` | gdy robot skręca w złą stronę |
-| kalibruj serwo 360° **S0** przesunięcie **0** µs | `borsuk.setServoTrim(servo, us)` | *(więcej…)* – patrz [kalibracja](kalibracja-i-problemy.md) |
-| zakres serw: 0° = **500** µs, 180° = **2500** µs | `borsuk.setServoRange(min, max)` | *(więcej…)* – gdy serwo buczy na krańcach |
+**Block language:** blocks are in Polish when the MakeCode editor language is set to Polish
+(gear icon → *Language* → *Polski*), and in English otherwise. In the JavaScript/Python view
+the functions always have the English names listed below, e.g. `borsuk.drive(...)`.
 
 ---
 
-## Kategoria „Borsuk Pilot” (joystick)
+## "Borsuk" category (robot)
 
-| Blok | Kod | Opis |
+### Drive
+
+| Block | Code | Description |
 |---|---|---|
-| uruchom pilota | `pilot.init()` | nie musisz go używać – inne bloki robią to same |
-| przycisk pilota **[góra]** wciśnięty | `pilot.isPressed(key)` | przyciski: góra, dół, lewo, prawo, select, mode, joystick |
-| gdy wciśnięto przycisk pilota **[góra]** | `pilot.onKey(key, handler)` | zdarzenie przy wciśnięciu |
-| joystick oś **X** | `pilot.axis(axis)` | -100…100, X: ujemne = lewo, Y: ujemne = dół |
-| joystick wychylony **[w górę]** | `pilot.isDirection(dir)` | 8 kierunków + „na środku” |
-| kalibruj środek joysticka | `pilot.calibrate()` | robione automatycznie przy starcie – nie dotykaj wtedy gałki |
-| wysyłaj sterowanie do robota, grupa radiowa **1** | `pilot.startSending(group)` | wysyła 20× na sekundę stan joysticka i przycisków |
+| drive **[forward]** at speed **50** | `borsuk.drive(BorsukMove.Forward, 50)` | drives until you stop it; directions: forward, backward, left (spin), right (spin); speed 0–100 % |
+| drive **[forward]** at speed **50** for **1000** ms | `borsuk.driveFor(move, speed, ms)` | drives for the given time, then stops |
+| stop robot | `borsuk.stop()` | |
+| wheels: left **50** right **50** | `borsuk.tank(left, right)` | each wheel separately, -100…100 (negative = backward) – arcs, slaloms |
+| steer like joystick x **0** y **50** | `borsuk.steer(x, y)` | y = forward/backward, x = turn, -100…100 |
 
-**Pilot wyłącza wyświetlacz LED** (wspólne piny z joystickiem). Do sygnalizacji używaj
-dźwięku – buzzer jest na P0, działają zwykłe bloki *Muzyka*.
+### Distance sensor
+
+| Block | Code | Description |
+|---|---|---|
+| distance sensor TRIG **P1** ECHO **P2** | `borsuk.setDistanceSensor(trig, echo)` | call once at the start; for a Grove sensor pick the same pin twice |
+| distance (cm) | `borsuk.distance()` | 0 = no reading (nothing within ~4 m) |
+| obstacle closer than **20** cm | `borsuk.obstacleCloserThan(cm)` | true/false; no reading = no obstacle |
+
+RCW-0001 wiring and notes on replacement sensors: [hardware](hardware.md#rcw-0001-distance-sensor).
+
+### DC motors
+
+| Block | Code | Description |
+|---|---|---|
+| motor **A** run **forward** at speed **50** | `borsuk.motorRun(motor, dir, speed)` | a single motor, 0–100 % |
+| stop motor **A** | `borsuk.motorStop(motor)` | |
+
+### Servos
+
+| Block | Code | Description |
+|---|---|---|
+| servo **S2** set angle **90** | `borsuk.servoAngle(servo, angle)` | standard servo 0–180° |
+| 360° servo **S0** spin at speed **50** | `borsuk.servoSpin(servo, speed)` | continuous rotation servo, -100…100 |
+| stop servo **S0** | `borsuk.servoStop(servo)` | turns the signal off (a 360° servo stops, a standard one stops holding its position) |
+
+### Remote control (robot side)
+
+| Block | Code | Description |
+|---|---|---|
+| receive remote control, radio group **1** | `borsuk.startRemote(group)` | the robot drives by the joystick on its own; stops after 0.5 s without a signal |
+| on remote **[up]** pressed | `borsuk.onRemoteKey(key, handler)` | event |
+| remote **[up]** is pressed | `borsuk.remoteKeyPressed(key)` | true/false |
+| remote joystick axis **X** | `borsuk.remoteAxis(axis)` | -100…100 |
+| remote connected | `borsuk.isRemoteConnected()` | |
+| drive with remote joystick **on/off** | `borsuk.setRemoteAutoDrive(on)` | turn off when you want to program the robot's reaction yourself |
+
+### Settings
+
+| Block | Code | Description |
+|---|---|---|
+| robot drive: **DC motors (v2) / 360° servos (v1)** | `borsuk.setDriveMode(mode)` | default: DC motors |
+| reverse motor **A** on | `borsuk.reverseMotor(motor, on)` | when a wheel spins the wrong way |
+| swap left and right wheel on | `borsuk.swapSides(on)` | when the robot turns the wrong way |
+| calibrate 360° servo **S0** offset **0** µs | `borsuk.setServoTrim(servo, us)` | *(more…)* – see [calibration](calibration-troubleshooting.md) |
+| servo range: 0° = **500** µs, 180° = **2500** µs | `borsuk.setServoRange(min, max)` | *(more…)* – when a servo buzzes at the ends |
 
 ---
 
-## Przykłady
+## "Borsuk Remote" category (joystick)
 
-Gotowe programy w [`examples/makecode/`](../examples/makecode/). Aby otworzyć: nowy
-projekt → dodaj rozszerzenie → przełącz na **JavaScript** → wklej treść pliku →
-wróć do **Bloków**.
-
-| Plik | Na który micro:bit | Co robi |
+| Block | Code | Description |
 |---|---|---|
-| [01-pierwsza-jazda.ts](../examples/makecode/01-pierwsza-jazda.ts) | robot | A = przejazd tam i z powrotem, B = stop |
-| [02-kwadrat.ts](../examples/makecode/02-kwadrat.ts) | robot | jazda po kwadracie |
-| [03-pilot.ts](../examples/makecode/03-pilot.ts) | **pilot** | wysyłanie sterowania |
-| [04-robot-zdalny.ts](../examples/makecode/04-robot-zdalny.ts) | robot | jazda pilotem + serwo + melodia |
-| [05-omijanie-przeszkod.ts](../examples/makecode/05-omijanie-przeszkod.ts) | robot | jazda autonomiczna z czujnikiem odległości |
-| [06-test-pilota.ts](../examples/makecode/06-test-pilota.ts) | pilot | test przycisków i joysticka (dźwięk + konsola) |
-| [07-kalibracja.ts](../examples/makecode/07-kalibracja.ts) | robot | ustawianie kierunków i serw 360° |
-| [08-znajdz-piny-czujnika.ts](../examples/makecode/08-znajdz-piny-czujnika.ts) | robot | wykrywa, na których pinach (P0/P1/P2/P19/P20) jest czujnik odległości |
+| start remote | `pilot.init()` | you don't need it – other blocks call it automatically |
+| remote button **[up]** is pressed | `pilot.isPressed(key)` | buttons: up, down, left, right, select, mode, joystick |
+| on remote button **[up]** pressed | `pilot.onKey(key, handler)` | event on press |
+| joystick axis **X** | `pilot.axis(axis)` | -100…100, X: negative = left, Y: negative = down |
+| joystick pushed **[up]** | `pilot.isDirection(dir)` | 8 directions + "centered" |
+| calibrate joystick center | `pilot.calibrate()` | done automatically at start – don't touch the stick then |
+| send control to robot, radio group **1** | `pilot.startSending(group)` | sends the joystick and button state 20 times per second |
 
-Wszystkie przykłady są kompilowane w CI, więc na pewno działają z bieżącą wersją rozszerzenia.
+**The remote turns the LED display off** (it shares pins with the joystick). Use sound for
+feedback – the buzzer is on P0, regular *Music* blocks work.
+
+---
+
+## Examples
+
+Ready programs are in [`examples/makecode/`](../examples/makecode/). To open one: new project →
+add the extension → switch to **JavaScript** → paste the file → switch back to **Blocks**.
+
+| File | Which micro:bit | What it does |
+|---|---|---|
+| [01-first-drive.ts](../examples/makecode/01-first-drive.ts) | robot | A = there and back, B = stop |
+| [02-square.ts](../examples/makecode/02-square.ts) | robot | drives in a square |
+| [03-remote.ts](../examples/makecode/03-remote.ts) | **remote** | sends control |
+| [04-remote-robot.ts](../examples/makecode/04-remote-robot.ts) | robot | remote driving + servo + melody |
+| [05-obstacle-avoidance.ts](../examples/makecode/05-obstacle-avoidance.ts) | robot | autonomous driving with the distance sensor |
+| [06-remote-test.ts](../examples/makecode/06-remote-test.ts) | remote | button and joystick test (sound + console) |
+| [07-calibration.ts](../examples/makecode/07-calibration.ts) | robot | setting wheel directions and 360° servos |
+| [08-find-sensor-pins.ts](../examples/makecode/08-find-sensor-pins.ts) | robot | finds which pins (P0/P1/P2/P19/P20) the distance sensor is on |
+
+All examples are compiled in CI, so they work with the current version of the extension.

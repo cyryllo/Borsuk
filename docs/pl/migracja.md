@@ -1,3 +1,5 @@
+[English](../migration.md) | **Polski**
+
 # Przejście ze starych repozytoriów
 
 ## MakeCode
@@ -30,7 +32,7 @@ Przyciski: `A`→`Up` (góra), `B`→`Left`, `C`→`Right`, `D`→`Down`, `E`→
 
 ## MicroPython
 
-Zamiast `borsuk.py` + `joystick.py` jest jeden nowy [`python/borsuk.py`](../python/borsuk.py).
+Zamiast `borsuk.py` + `joystick.py` jest jeden nowy [`python/borsuk.py`](../../python/borsuk.py).
 
 | Stare | Nowe |
 |---|---|
@@ -42,7 +44,7 @@ Zamiast `borsuk.py` + `joystick.py` jest jeden nowy [`python/borsuk.py`](../pyth
 | `Borsuk.ServosTurnZero(0)` / `ServosTurnFull(0)` | `robot.servo_angle(S0, 0)` / `robot.servo_angle(S0, 180)` |
 | `Borsuk.ServosStop(2)` | `robot.servo_stop(S2)` |
 | `JoyStick.Up.read_digital() == 0` | `pilot.is_pressed(UP)` (`pilot = Pilot()`) |
-| `JoyStick.JX.read_analog() < 400` | `pilot.x() < -30` lub `pilot.direction() == 'lewo'` |
+| `JoyStick.JX.read_analog() < 400` | `pilot.x() < -30` lub `pilot.direction() == 'left'` |
 
 ## Grove_rpipico
 

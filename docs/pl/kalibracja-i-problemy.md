@@ -1,8 +1,10 @@
+[English](../calibration-troubleshooting.md) | **Polski**
+
 # Kalibracja i rozwiązywanie problemów
 
 Najszybciej: wgraj przykład kalibracyjny
-([MakeCode](../examples/makecode/07-kalibracja.ts) /
-[MicroPython](../examples/micropython/06_kalibracja.py)) i zmieniaj ustawienia, aż
+([MakeCode](../../examples/makecode/07-calibration.ts) /
+[MicroPython](../../examples/micropython/06_calibration.py)) i zmieniaj ustawienia, aż
 robot jedzie poprawnie. Potem skopiuj te same ustawienia na początek swoich programów.
 
 ## 1. Kierunki kół (silniki DC)
@@ -44,7 +46,7 @@ pierwszą sekundę po włączeniu pilota**. W razie potrzeby użyj bloku
 | Robot co chwilę staje podczas jazdy pilotem | słabe baterie w pilocie / zbyt duża odległość; failsafe zatrzymuje robota po 0,5 s bez sygnału |
 | W pilocie nie działa przycisk „mode” | stara wersja biblioteki JoyStick miała ten przycisk na P0 zamiast P6 – używaj tej biblioteki |
 | Odczyty joysticka „skaczą”, dziwne zachowanie | w programie pilota użyto wyświetlacza LED – wspólne piny z joystickiem |
-| Odległość zawsze 0 | złe piny TRIG/ECHO; czujnik zasilany 5 V bez dzielnika na ECHO; nic w zasięgu (do ~4 m) |
+| Odległość zawsze 0 | złe piny TRIG/ECHO (użyj [wykrywacza pinów](../../examples/makecode/08-find-sensor-pins.ts)); czujnik zasilany 5 V bez dzielnika na ECHO; nic w zasięgu (do ~4 m) |
 | Robot resetuje się przy ruszaniu | rozładowane akumulatory |
 | Serwo drga, gdy kręcą się silniki (V1) | limit kanałów PWM micro:bita V1 – patrz [sprzęt](sprzet.md#microbit-v1-a-v2) |
 | `MemoryError` w MicroPython (V1) | za mało pamięci – skróć program albo użyj micro:bita V2 |

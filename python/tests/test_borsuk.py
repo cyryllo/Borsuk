@@ -1,6 +1,6 @@
-"""Testy biblioteki borsuk.py na komputerze (atrapy w katalogu fake/).
+"""Tests of borsuk.py on a computer (fake modules in fake/).
 
-Uruchom z katalogu python/:   python3 -m unittest discover -s tests -v
+Run from the python/ directory:   python3 -m unittest discover -s tests -v
 """
 import os
 import sys
@@ -9,7 +9,7 @@ import unittest
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path[:0] = [os.path.join(HERE, "fake"), os.path.dirname(HERE)]
 
-import microbit  # noqa: E402  (atrapa)
+import microbit  # noqa: E402  (fake)
 import radio  # noqa: E402
 import machine  # noqa: E402
 import borsuk  # noqa: E402
@@ -44,11 +44,11 @@ class TestRobotDC(unittest.TestCase):
 
     def test_turn_left(self):
         self.r.drive(borsuk.LEFT, 40)
-        self.assertEqual(motor_state(0)[:2], (0, 1))   # lewe do tyłu
-        self.assertEqual(motor_state(1)[:2], (1, 0))   # prawe do przodu
+        self.assertEqual(motor_state(0)[:2], (0, 1))   # left backward
+        self.assertEqual(motor_state(1)[:2], (1, 0))   # right forward
 
     def test_speed_zero_and_clamp(self):
-        # stary kod: prędkość 0 -> write_analog(-1) -> błąd
+        # old code: speed 0 -> write_analog(-1) -> error
         self.r.motor_run(borsuk.A, borsuk.FORWARD, 0)
         self.r.motor_run(borsuk.A, borsuk.FORWARD, 500)
         self.assertEqual(motor_state(0)[2], 1023)
@@ -65,12 +65,12 @@ class TestRobotDC(unittest.TestCase):
         self.assertEqual(motor_state(1)[:2], (0, 1))
         self.r.sides_swapped = True
         self.r.tank(70, 0)
-        self.assertEqual(motor_state(1)[:2], (0, 1))   # lewe -> silnik B (odwrócony)
+        self.assertEqual(motor_state(1)[:2], (0, 1))   # left -> motor B (reversed)
 
     def test_steer_normalizes(self):
         self.r.steer(100, 100)
         self.assertEqual(motor_state(0)[2], 1023)
-        self.assertEqual(motor_state(1), (0, 0, 0))     # prawe stoi
+        self.assertEqual(motor_state(1), (0, 0, 0))     # right stopped
 
 
 class TestRobotServo(unittest.TestCase):
@@ -111,7 +111,7 @@ class TestDistance(unittest.TestCase):
         machine.echo_us[0] = 580
         self.assertEqual(r.distance(), 10)
         self.assertTrue(r.obstacle_closer_than(20))
-        machine.echo_us[0] = -1          # brak echa
+        machine.echo_us[0] = -1          # no echo
         self.assertEqual(r.distance(), 0)
         self.assertFalse(r.obstacle_closer_than(20))
 
@@ -126,7 +126,7 @@ class TestPilotAndRadio(unittest.TestCase):
     def test_pilot_init(self):
         p = Pilot()
         self.assertFalse(microbit.display.on_)
-        self.assertEqual(P.pin6.pull, P.pin6.PULL_UP)   # mode (stary kod JS: P0)
+        self.assertEqual(P.pin6.pull, P.pin6.PULL_UP)   # mode (old JS code used P0)
         self.assertEqual((p.x(), p.y()), (0, 0))
 
     def test_axes_and_direction(self):
@@ -134,7 +134,7 @@ class TestPilotAndRadio(unittest.TestCase):
         P.pin4.input_analog = 1023
         P.pin3.input_analog = 0
         self.assertEqual((p.x(), p.y()), (100, -100))
-        self.assertEqual(p.direction(), "dol-prawo")
+        self.assertEqual(p.direction(), "down-right")
         P.pin4.input_analog = 530           # w martwej strefie
         self.assertEqual(p.x(), 0)
 
@@ -143,13 +143,13 @@ class TestPilotAndRadio(unittest.TestCase):
         P.pin6.input_digital = 0            # mode
         self.assertTrue(p.is_pressed(borsuk.MODE))
         self.assertTrue(p.was_pressed(borsuk.MODE))
-        self.assertFalse(p.was_pressed(borsuk.MODE))  # tylko raz
+        self.assertFalse(p.was_pressed(borsuk.MODE))  # only once
 
     def test_round_trip(self):
         p = Pilot()
         P.pin4.input_analog = 0             # x = -100
         P.pin3.input_analog = 1023          # y = 100
-        P.pin10.input_digital = 0           # góra
+        P.pin10.input_digital = 0           # up
         p.send()
         r = Robot()
         radio.inbox.append(radio.sent[-1])
@@ -157,7 +157,7 @@ class TestPilotAndRadio(unittest.TestCase):
         self.assertEqual((r.remote_x, r.remote_y), (-100, 100))
         self.assertTrue(pressed & (1 << borsuk.UP))
         self.assertTrue(r.remote_connected())
-        # skręt w lewo przy jeździe do przodu: prawe koło szybciej
+        # turning left while driving forward: right wheel faster
         self.assertEqual(motor_state(0), (0, 0, 0))
         self.assertEqual(motor_state(1)[2], 1023)
 

@@ -1,5 +1,5 @@
-// Testy kompilacji – ten plik nie jest dołączany, gdy rozszerzenie
-// jest używane jako biblioteka. Wywołuje każdy blok przynajmniej raz.
+// Compile tests – this file is not included when the extension
+// is used as a library. Calls every block at least once.
 
 // --- robot
 borsuk.setDriveMode(BorsukDrive.DCMotors)
@@ -25,7 +25,7 @@ borsuk.stop()
 borsuk.setDistanceSensor(DigitalPin.P1, DigitalPin.P2)
 if (borsuk.obstacleCloserThan(20)) basic.showNumber(borsuk.distance())
 
-// --- odbiór z pilota
+// --- receiving from the remote
 borsuk.startRemote(1)
 borsuk.setRemoteAutoDrive(true)
 borsuk.onRemoteKey(PilotKey.Up, function () {
@@ -35,7 +35,7 @@ if (borsuk.isRemoteConnected() && borsuk.remoteKeyPressed(PilotKey.Mode)) {
     basic.showNumber(borsuk.remoteAxis(PilotAxis.X))
 }
 
-// --- pilot
+// --- remote
 pilot.onKey(PilotKey.Select, function () {
     music.playTone(Note.C, music.beat(BeatFraction.Quarter))
 })

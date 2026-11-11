@@ -1,5 +1,5 @@
-// PROGRAM NA micro:bit W ROBOCIE.
-// Robot jeździ zgodnie z joystickiem pilota, a przyciski pilota sterują serwem S2.
+// PROGRAM FOR THE micro:bit IN THE ROBOT.
+// The robot drives by the remote's joystick; remote buttons move servo S2.
 borsuk.startRemote(1)
 basic.showIcon(IconNames.Asleep)
 
@@ -14,7 +14,7 @@ borsuk.onRemoteKey(PilotKey.Mode, function () {
 })
 
 basic.forever(function () {
-    // uśmiech = pilot połączony, sen = brak sygnału (robot stoi)
+    // smile = remote connected, asleep = no signal (robot stands still)
     if (borsuk.isRemoteConnected()) {
         basic.showIcon(IconNames.Happy)
     } else {

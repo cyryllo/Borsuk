@@ -1,19 +1,17 @@
-/**
- * Robot Borsuk – sterowanie robotem.
- *
- * Sprzęt: micro:bit + Waveshare Motor Driver for micro:bit.
- *   Silnik A: PWMA=P8,  AIN1=P13, AIN2=P12
- *   Silnik B: PWMB=P16, BIN1=P14, BIN2=P15
- *   Serwa:    S0=P0, S1=P1, S2=P2
- *
- * Wersja v2 robota jeździ na silnikach DC (A = lewe koło, B = prawe koło),
- * wersja v1 na serwach 360° (S0 = lewe koło, S1 = prawe koło, zamontowane lustrzanie).
- */
+// Borsuk (Badger) robot – robot control.
+//
+// Hardware: micro:bit + Waveshare Motor Driver for micro:bit (TB6612FNG, driven by pins).
+//   Motor A: PWMA=P8,  AIN1=P13, AIN2=P12
+//   Motor B: PWMB=P16, BIN1=P14, BIN2=P15
+//   Servos:  S0=P0, S1=P1, S2=P2
+//
+// Robot v2 drives on DC motors (A = left wheel, B = right wheel),
+// robot v1 on 360° servos (S0 = left wheel, S1 = right wheel, mounted mirrored).
 
 enum BorsukMotor {
-    //% block="A (lewy)"
+    //% block="A (left)"
     A = 0,
-    //% block="B (prawy)"
+    //% block="B (right)"
     B = 1
 }
 
@@ -27,35 +25,35 @@ enum BorsukServo {
 }
 
 enum BorsukDir {
-    //% block="do przodu"
+    //% block="forward"
     Forward = 0,
-    //% block="do tyłu"
+    //% block="backward"
     Backward = 1
 }
 
 enum BorsukMove {
-    //% block="do przodu"
+    //% block="forward"
     Forward = 0,
-    //% block="do tyłu"
+    //% block="backward"
     Backward = 1,
-    //% block="w lewo (obrót)"
+    //% block="left (spin)"
     Left = 2,
-    //% block="w prawo (obrót)"
+    //% block="right (spin)"
     Right = 3
 }
 
 enum BorsukDrive {
-    //% block="silniki DC (v2)"
+    //% block="DC motors (v2)"
     DCMotors = 0,
-    //% block="serwa 360° (v1)"
+    //% block="360° servos (v1)"
     Servos360 = 1
 }
 
 /**
- * Bloki robota Borsuk
+ * Borsuk robot blocks
  */
 //% weight=100 color=#b5651d icon="" block="Borsuk"
-//% groups='["Jazda", "Czujnik odległości", "Silniki DC", "Serwa", "Pilot radiowy", "Ustawienia"]'
+//% groups='["Drive", "Distance sensor", "DC motors", "Servos", "Remote control", "Settings"]'
 namespace borsuk {
     const PWMA = AnalogPin.P8
     const AIN1 = DigitalPin.P13
@@ -67,12 +65,12 @@ namespace borsuk {
     let driveMode = BorsukDrive.DCMotors
     let motorReversed = [false, false]
     let sidesSwapped = false
-    // przesunięcie punktu zatrzymania serw 360° w µs (kalibracja)
+    // stop-point offset of 360° servos in µs (calibration)
     let servoTrim = [0, 0, 0]
-    // zakres impulsu serwa standardowego (0°..180°)
+    // pulse range of standard servos (0°..180°)
     let servoMinUs = 500
     let servoMaxUs = 2500
-    // ±zakres impulsu wokół 1500 µs dla serw 360° przy prędkości 100%
+    // ±pulse range around 1500 µs for 360° servos at 100% speed
     let spinRangeUs = 500
 
     let trigPin = DigitalPin.P1
@@ -90,9 +88,7 @@ namespace borsuk {
         return DigitalPin.P2
     }
 
-    /**
-     * Ustawia silnik na prędkość -100..100 (ujemna = do tyłu).
-     */
+    /** Sets a motor to speed -100..100 (negative = backward). */
     function setMotor(motor: BorsukMotor, speed: number): void {
         speed = Math.round(Math.constrain(speed, -100, 100))
         if (motorReversed[motor]) speed = -speed
@@ -110,30 +106,30 @@ namespace borsuk {
         }
     }
 
-    /** Ustawia jedno koło (0 = lewe, 1 = prawe) na prędkość -100..100. */
+    /** Sets one wheel (0 = left, 1 = right) to speed -100..100. */
     function setWheel(side: number, speed: number): void {
         if (sidesSwapped) side = 1 - side
         if (driveMode == BorsukDrive.DCMotors) {
             if (speed == 0) motorStop(side == 0 ? BorsukMotor.A : BorsukMotor.B)
             else setMotor(side == 0 ? BorsukMotor.A : BorsukMotor.B, speed)
         } else {
-            // serwa kół są zamontowane lustrzanie – prawe kręci się odwrotnie
+            // wheel servos are mounted mirrored – the right one spins the other way
             const servo = side == 0 ? BorsukServo.S0 : BorsukServo.S1
             if (speed == 0) servoStop(servo)
             else servoSpin(servo, side == 0 ? speed : -speed)
         }
     }
 
-    // ------------------------------------------------------------------ Jazda
+    // ------------------------------------------------------------------ Drive
 
     /**
-     * Jedź w wybranym kierunku. Robot jedzie, dopóki go nie zatrzymasz.
-     * @param move kierunek jazdy
-     * @param speed prędkość w procentach, eg: 50
+     * Drive in a direction. The robot keeps driving until you stop it.
+     * @param move direction
+     * @param speed speed in percent, eg: 50
      */
-    //% blockId=borsuk_drive block="jedź %move|z prędkością %speed"
+    //% blockId=borsuk_drive block="drive %move|at speed %speed"
     //% speed.min=0 speed.max=100 speed.defl=50
-    //% group="Jazda" weight=100
+    //% group="Drive" weight=100
     export function drive(move: BorsukMove, speed: number): void {
         speed = Math.constrain(speed, 0, 100)
         if (move == BorsukMove.Forward) tank(speed, speed)
@@ -143,14 +139,14 @@ namespace borsuk {
     }
 
     /**
-     * Jedź przez podany czas, a potem się zatrzymaj.
-     * @param move kierunek jazdy
-     * @param speed prędkość w procentach, eg: 50
-     * @param ms czas jazdy w milisekundach, eg: 1000
+     * Drive for the given time, then stop.
+     * @param move direction
+     * @param speed speed in percent, eg: 50
+     * @param ms driving time in milliseconds, eg: 1000
      */
-    //% blockId=borsuk_drive_for block="jedź %move|z prędkością %speed|przez %ms ms"
+    //% blockId=borsuk_drive_for block="drive %move|at speed %speed|for %ms ms"
     //% speed.min=0 speed.max=100 speed.defl=50 ms.defl=1000 ms.min=0
-    //% group="Jazda" weight=95
+    //% group="Drive" weight=95
     export function driveFor(move: BorsukMove, speed: number, ms: number): void {
         drive(move, speed)
         basic.pause(ms)
@@ -158,38 +154,38 @@ namespace borsuk {
     }
 
     /**
-     * Zatrzymaj oba koła.
+     * Stop both wheels.
      */
-    //% blockId=borsuk_stop block="zatrzymaj robota"
-    //% group="Jazda" weight=90
+    //% blockId=borsuk_stop block="stop robot"
+    //% group="Drive" weight=90
     export function stop(): void {
         setWheel(0, 0)
         setWheel(1, 0)
     }
 
     /**
-     * Ustaw prędkość każdego koła osobno (jazda „czołgowa”).
-     * Wartości ujemne = do tyłu.
-     * @param left prędkość lewego koła -100..100, eg: 50
-     * @param right prędkość prawego koła -100..100, eg: 50
+     * Set the speed of each wheel separately ("tank" drive).
+     * Negative values = backward.
+     * @param left left wheel speed -100..100, eg: 50
+     * @param right right wheel speed -100..100, eg: 50
      */
-    //% blockId=borsuk_tank block="koła: lewe %left|prawe %right"
+    //% blockId=borsuk_tank block="wheels: left %left|right %right"
     //% left.shadow="speedPicker" right.shadow="speedPicker"
-    //% group="Jazda" weight=85
+    //% group="Drive" weight=85
     export function tank(left: number, right: number): void {
         setWheel(0, Math.constrain(left, -100, 100))
         setWheel(1, Math.constrain(right, -100, 100))
     }
 
     /**
-     * Steruj jak joystickiem: y = jazda przód/tył, x = skręt.
-     * Obie wartości w zakresie -100..100.
-     * @param x skręt (ujemny = w lewo), eg: 0
-     * @param y jazda (ujemny = do tyłu), eg: 50
+     * Steer like with a joystick: y = forward/backward, x = turn.
+     * Both values -100..100.
+     * @param x turn (negative = left), eg: 0
+     * @param y drive (negative = backward), eg: 50
      */
-    //% blockId=borsuk_steer block="steruj jak joystickiem x %x|y %y"
+    //% blockId=borsuk_steer block="steer like joystick x %x|y %y"
     //% x.shadow="speedPicker" y.shadow="speedPicker"
-    //% group="Jazda" weight=80
+    //% group="Drive" weight=80
     export function steer(x: number, y: number): void {
         x = Math.constrain(x, -100, 100)
         y = Math.constrain(y, -100, 100)
@@ -203,28 +199,28 @@ namespace borsuk {
         tank(left, right)
     }
 
-    // ------------------------------------------------------- Czujnik odległości
+    // -------------------------------------------------------- Distance sensor
 
     /**
-     * Ustaw piny czujnika ultradźwiękowego (RCW-0001, HC-SR04P, RCWL-1601).
-     * Dla czujnika Grove (jeden pin sygnałowy) wybierz ten sam pin dwa razy.
-     * @param trig pin TRIG, eg: DigitalPin.P1
-     * @param echo pin ECHO, eg: DigitalPin.P2
+     * Set the pins of the ultrasonic sensor (RCW-0001, HC-SR04P, RCWL-1601).
+     * For a Grove sensor (single signal pin) pick the same pin twice.
+     * @param trig TRIG pin, eg: DigitalPin.P1
+     * @param echo ECHO pin, eg: DigitalPin.P2
      */
-    //% blockId=borsuk_sonar_pins block="czujnik odległości TRIG %trig|ECHO %echo"
+    //% blockId=borsuk_sonar_pins block="distance sensor TRIG %trig|ECHO %echo"
     //% trig.defl=DigitalPin.P1 echo.defl=DigitalPin.P2
-    //% group="Czujnik odległości" weight=60
+    //% group="Distance sensor" weight=60
     export function setDistanceSensor(trig: DigitalPin, echo: DigitalPin): void {
         trigPin = trig
         echoPin = echo
     }
 
     /**
-     * Zmierz odległość w centymetrach. Zwraca 0, gdy nie ma odczytu
-     * (brak echa / przeszkoda dalej niż ok. 4 m).
+     * Measure the distance in centimeters. Returns 0 when there is no reading
+     * (no echo / obstacle farther than about 4 m).
      */
-    //% blockId=borsuk_distance block="odległość (cm)"
-    //% group="Czujnik odległości" weight=55
+    //% blockId=borsuk_distance block="distance (cm)"
+    //% group="Distance sensor" weight=55
     export function distance(): number {
         pins.setPull(trigPin, PinPullMode.PullNone)
         pins.digitalWritePin(trigPin, 0)
@@ -232,44 +228,44 @@ namespace borsuk {
         pins.digitalWritePin(trigPin, 1)
         control.waitMicros(10)
         pins.digitalWritePin(trigPin, 0)
-        // 25 ms ≈ 4,3 m – dalej czujnik i tak nie mierzy wiarygodnie
+        // 25 ms ≈ 4.3 m – the sensor is not reliable beyond that anyway
         const us = pins.pulseIn(echoPin, PulseValue.High, 25000)
         return Math.idiv(us, 58)
     }
 
     /**
-     * Czy przed robotem jest przeszkoda bliżej niż podana odległość?
-     * @param cm odległość w centymetrach, eg: 20
+     * Is there an obstacle closer than the given distance?
+     * @param cm distance in centimeters, eg: 20
      */
-    //% blockId=borsuk_obstacle block="przeszkoda bliżej niż %cm cm"
+    //% blockId=borsuk_obstacle block="obstacle closer than %cm cm"
     //% cm.defl=20 cm.min=2 cm.max=400
-    //% group="Czujnik odległości" weight=50
+    //% group="Distance sensor" weight=50
     export function obstacleCloserThan(cm: number): boolean {
         const d = distance()
         return d > 0 && d < cm
     }
 
-    // -------------------------------------------------------------- Silniki DC
+    // -------------------------------------------------------------- DC motors
 
     /**
-     * Uruchom pojedynczy silnik DC.
-     * @param motor silnik A lub B
-     * @param dir kierunek
-     * @param speed prędkość w procentach, eg: 50
+     * Run a single DC motor.
+     * @param motor motor A or B
+     * @param dir direction
+     * @param speed speed in percent, eg: 50
      */
-    //% blockId=borsuk_motor_run block="silnik %motor|kręć %dir|z prędkością %speed"
+    //% blockId=borsuk_motor_run block="motor %motor|run %dir|at speed %speed"
     //% speed.min=0 speed.max=100 speed.defl=50
-    //% group="Silniki DC" weight=40
+    //% group="DC motors" weight=40
     export function motorRun(motor: BorsukMotor, dir: BorsukDir, speed: number): void {
         speed = Math.constrain(speed, 0, 100)
         setMotor(motor, dir == BorsukDir.Forward ? speed : -speed)
     }
 
     /**
-     * Zatrzymaj silnik DC (swobodny wybieg).
+     * Stop a DC motor (coast).
      */
-    //% blockId=borsuk_motor_stop block="zatrzymaj silnik %motor"
-    //% group="Silniki DC" weight=35
+    //% blockId=borsuk_motor_stop block="stop motor %motor"
+    //% group="DC motors" weight=35
     export function motorStop(motor: BorsukMotor): void {
         if (motor == BorsukMotor.A) {
             pins.analogWritePin(PWMA, 0)
@@ -282,16 +278,16 @@ namespace borsuk {
         }
     }
 
-    // ------------------------------------------------------------------ Serwa
+    // ----------------------------------------------------------------- Servos
 
     /**
-     * Ustaw zwykłe serwo (0–180°) pod podanym kątem.
-     * @param servo złącze serwa
-     * @param angle kąt 0..180, eg: 90
+     * Set a standard servo (0–180°) to an angle.
+     * @param servo servo connector
+     * @param angle angle 0..180, eg: 90
      */
-    //% blockId=borsuk_servo_angle block="serwo %servo|ustaw kąt %angle"
+    //% blockId=borsuk_servo_angle block="servo %servo|set angle %angle"
     //% angle.shadow="protractorPicker" angle.defl=90
-    //% group="Serwa" weight=30
+    //% group="Servos" weight=30
     export function servoAngle(servo: BorsukServo, angle: number): void {
         angle = Math.constrain(angle, 0, 180)
         const us = servoMinUs + Math.idiv(angle * (servoMaxUs - servoMinUs), 180)
@@ -299,13 +295,13 @@ namespace borsuk {
     }
 
     /**
-     * Kręć serwem 360° (ciągłego obrotu). Ujemna prędkość = w drugą stronę.
-     * @param servo złącze serwa
-     * @param speed prędkość -100..100, eg: 50
+     * Spin a 360° (continuous rotation) servo. Negative speed = other direction.
+     * @param servo servo connector
+     * @param speed speed -100..100, eg: 50
      */
-    //% blockId=borsuk_servo_spin block="serwo 360° %servo|kręć z prędkością %speed"
+    //% blockId=borsuk_servo_spin block="360° servo %servo|spin at speed %speed"
     //% speed.shadow="speedPicker"
-    //% group="Serwa" weight=25
+    //% group="Servos" weight=25
     export function servoSpin(servo: BorsukServo, speed: number): void {
         speed = Math.constrain(speed, -100, 100)
         const us = 1500 + servoTrim[servo] + Math.idiv(speed * spinRangeUs, 100)
@@ -313,70 +309,69 @@ namespace borsuk {
     }
 
     /**
-     * Wyłącz sygnał serwa – zwykłe serwo przestaje trzymać pozycję,
-     * serwo 360° zatrzymuje się.
+     * Turn off the servo signal – a standard servo stops holding its position,
+     * a 360° servo stops.
      */
-    //% blockId=borsuk_servo_stop block="zatrzymaj serwo %servo"
-    //% group="Serwa" weight=20
+    //% blockId=borsuk_servo_stop block="stop servo %servo"
+    //% group="Servos" weight=20
     export function servoStop(servo: BorsukServo): void {
         pins.digitalWritePin(servoDigitalPin(servo), 0)
     }
 
-    // -------------------------------------------------------------- Ustawienia
+    // --------------------------------------------------------------- Settings
 
     /**
-     * Wybierz, czym jeździ robot: silniki DC (v2) czy serwa 360° (v1).
-     * Domyślnie: silniki DC.
+     * Choose what the robot drives on: DC motors (v2) or 360° servos (v1).
+     * Default: DC motors.
      */
-    //% blockId=borsuk_set_drive block="napęd robota: %mode"
-    //% group="Ustawienia" weight=15
+    //% blockId=borsuk_set_drive block="robot drive: %mode"
+    //% group="Settings" weight=15
     export function setDriveMode(mode: BorsukDrive): void {
         stop()
         driveMode = mode
     }
 
     /**
-     * Odwróć kierunek obrotów silnika DC (gdy koło kręci się w złą stronę).
+     * Reverse the direction of a DC motor (when a wheel spins the wrong way).
      */
-    //% blockId=borsuk_reverse_motor block="odwróć kierunek silnika %motor|%reversed"
+    //% blockId=borsuk_reverse_motor block="reverse motor %motor|%reversed"
     //% reversed.shadow="toggleOnOff" reversed.defl=true
-    //% group="Ustawienia" weight=12
+    //% group="Settings" weight=12
     export function reverseMotor(motor: BorsukMotor, reversed: boolean): void {
         motorReversed[motor] = reversed
     }
 
     /**
-     * Zamień strony – gdy robot skręca w przeciwną stronę niż powinien.
+     * Swap sides – when the robot turns the opposite way.
      */
-    //% blockId=borsuk_swap_sides block="zamień lewe i prawe koło %swapped"
+    //% blockId=borsuk_swap_sides block="swap left and right wheel %swapped"
     //% swapped.shadow="toggleOnOff" swapped.defl=true
-    //% group="Ustawienia" weight=11
+    //% group="Settings" weight=11
     export function swapSides(swapped: boolean): void {
         sidesSwapped = swapped
     }
 
     /**
-     * Kalibracja serwa 360°: przesunięcie punktu zatrzymania w µs.
-     * Zwiększaj/zmniejszaj, aż serwo przy małej prędkości kręci się
-     * jednakowo w obie strony.
-     * @param servo złącze serwa
-     * @param trim przesunięcie w mikrosekundach, eg: 0
+     * 360° servo calibration: stop-point offset in µs.
+     * Increase/decrease until the servo spins equally slowly in both directions.
+     * @param servo servo connector
+     * @param trim offset in microseconds, eg: 0
      */
-    //% blockId=borsuk_servo_trim block="kalibruj serwo 360° %servo|przesunięcie %trim µs"
+    //% blockId=borsuk_servo_trim block="calibrate 360° servo %servo|offset %trim µs"
     //% trim.min=-200 trim.max=200
-    //% group="Ustawienia" weight=10 advanced=true
+    //% group="Settings" weight=10 advanced=true
     export function setServoTrim(servo: BorsukServo, trim: number): void {
         servoTrim[servo] = Math.constrain(trim, -200, 200)
     }
 
     /**
-     * Zakres impulsu dla zwykłych serw (dla 0° i 180°). Domyślnie 500–2500 µs.
-     * Zmniejsz zakres, jeśli serwo „buczy” na krańcach.
-     * @param minUs impuls dla 0°, eg: 500
-     * @param maxUs impuls dla 180°, eg: 2500
+     * Pulse range of standard servos (for 0° and 180°). Default 500–2500 µs.
+     * Narrow the range if the servo buzzes at the ends.
+     * @param minUs pulse for 0°, eg: 500
+     * @param maxUs pulse for 180°, eg: 2500
      */
-    //% blockId=borsuk_servo_range block="zakres serw: 0° = %minUs µs|180° = %maxUs µs"
-    //% group="Ustawienia" weight=9 advanced=true
+    //% blockId=borsuk_servo_range block="servo range: 0° = %minUs µs|180° = %maxUs µs"
+    //% group="Settings" weight=9 advanced=true
     export function setServoRange(minUs: number, maxUs: number): void {
         servoMinUs = Math.constrain(minUs, 300, 2700)
         servoMaxUs = Math.constrain(maxUs, 300, 2700)

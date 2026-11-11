@@ -1,3 +1,5 @@
+[English](../hardware.md) | **Polski**
+
 # Sprzęt, połączenia i budowa
 
 ## Pliki projektu
@@ -6,13 +8,13 @@
   (pliki do cięcia, plik STEP do dalszego rozwoju, STL obudowy pilota)
 - **Printables** – obudowa pilota (Handle Joystick for micro:bit, Keyestudio):
   <https://www.printables.com/model/40102-handle-joystick-for-microbit-module-from-keyestudi>
-- DXF robota v2 jest też w tym repozytorium: [`hardware/Borsuk_v2.dxf`](../hardware/Borsuk_v2.dxf)
+- DXF robota v2 jest też w tym repozytorium: [`hardware/Borsuk_v2.dxf`](../../hardware/Borsuk_v2.dxf)
 
 ## Lista części (robot v2)
 
 | Część | Ilość | Uwagi |
 |---|---|---|
-| Sklejka 3 mm | arkusz min. 160 × 370 mm | do cięcia laserem, plik [`Borsuk_v2.dxf`](../hardware/Borsuk_v2.dxf) |
+| Sklejka 3 mm | arkusz min. 160 × 370 mm | do cięcia laserem, plik [`Borsuk_v2.dxf`](../../hardware/Borsuk_v2.dxf) |
 | Klej do drewna | | do sklejenia korpusu |
 | BBC micro:bit V1 lub V2 | 1 | V2 zalecany (więcej pamięci, głośnik) |
 | Waveshare **Motor Driver for micro:bit** (nr 15220) | 1 | sterownik 2 silników DC + 3 złącza serw, np. [Botland](https://botland.com.pl/microbit-rozszerzenia/13303-sterownik-2-silnikow-i-3-serwomechanizmow-i2c-dla-bbc-microbit-waveshare-15220-5904422320447.html) |
@@ -35,17 +37,17 @@
 
 ## Wycinanie i składanie
 
-- Plik: [`hardware/Borsuk_v2.dxf`](../hardware/Borsuk_v2.dxf), jednostki **mm**, wszystkie
-  części na jednym arkuszu **148 × 360 mm**. Podgląd: [`hardware/Borsuk_v2_podglad.svg`](../hardware/Borsuk_v2_podglad.svg).
+- Plik: [`hardware/Borsuk_v2.dxf`](../../hardware/Borsuk_v2.dxf), jednostki **mm**, wszystkie
+  części na jednym arkuszu **148 × 360 mm**. Podgląd: [`hardware/Borsuk_v2_preview.svg`](../../hardware/Borsuk_v2_preview.svg).
 - Gniazda na wpusty mają **3 × 7 mm**, więc konstrukcja jest pod sklejkę **3 mm**.
   Przy grubszej/cieńszej sklejce przeskaluj gniazda, nie cały rysunek.
 - Części: 2 boki (z otworami na silniki i rzędami otworów montażowych), podstawa,
   przód z „buzią” i otworami na czujnik, tył, perforowana płyta górna,
   drobne elementy (podkładki, zaczepy).
 
-Więcej w [`hardware/README.md`](../hardware/README.md).
+Więcej w [`hardware/README.md`](../../hardware/README.pl.md).
 
-![Podgląd DXF](../hardware/Borsuk_v2_podglad.svg)
+![Podgląd DXF](../../hardware/Borsuk_v2_preview.svg)
 
 ## Sterownik silników – Waveshare Motor Driver for micro:bit
 
@@ -65,7 +67,7 @@ Dokumentacja producenta: [Waveshare Wiki – Motor Driver for micro:bit](https:/
 | Otwory montażowe | Ø3 mm (śruby M3 × 10) |
 | Wymiary | 65 × 36 mm, otwory w rozstawie 57,24 × 28,7 mm |
 
-![Sterownik Waveshare – wymiary i złącza](../images/waveshare-motor-driver-wymiary.webp)
+![Sterownik Waveshare – wymiary i złącza](../../images/waveshare-motor-driver-dimensions.webp)
 
 *Rysunek: Waveshare. Wymiary w mm; otwory montażowe Ø3 mm w rozstawie 57,24 × 28,7 mm.*
 
@@ -121,8 +123,8 @@ tam podłącza się czujnik:
 Zasilanie z **3V3** jest bezpieczne – ECHO oddaje wtedy 3,3 V.
 
 **Nie wiesz, na których pinach jest czujnik?** Wgraj wykrywacz
-([MakeCode](../examples/makecode/08-znajdz-piny-czujnika.ts) /
-[MicroPython](../examples/micropython/07_znajdz_piny_czujnika.py)), postaw rękę
+([MakeCode](../../examples/makecode/08-find-sensor-pins.ts) /
+[MicroPython](../../examples/micropython/07_find_sensor_pins.py)), postaw rękę
 10–50 cm przed czujnikiem i wciśnij A. Na wyświetlaczu pojawi się np. `T0 E1 23`
 = TRIG na P0, ECHO na P1, 23 cm. Potem ustaw te piny blokiem
 `czujnik odległości TRIG … ECHO …` na początku programu
@@ -154,7 +156,7 @@ obudowie ([Printables](https://www.printables.com/model/40102-handle-joystick-fo
 Dokumentacja producenta: [KS0296 – docs.keyestudio.com](https://docs.keyestudio.com/projects/KS0296/en/latest/docs/KS0296.html).
 Poniższy pinout jest z nią zgodny.
 
-![Pilot z joystickiem](../images/pilot-joystick.jpg)
+![Pilot z joystickiem](../../images/pilot-joystick.jpg)
 
 | Element | Pin micro:bit |
 |---|---|

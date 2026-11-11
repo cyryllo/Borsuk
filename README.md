@@ -1,40 +1,46 @@
-# Borsuk – robot ze sklejki na micro:bit
+**English** | [Polski](README.pl.md)
 
-![Roboty Borsuk i pilot](images/roboty.webp)
+# Borsuk (Badger) – a plywood robot for micro:bit
 
-**Borsuk** (ang. *Badger*) to edukacyjny robot wycinany laserowo ze sklejki 3 mm, sterowany przez
-**BBC micro:bit** (V1 lub V2). Napęd i serwa obsługuje płytka
-*Waveshare Motor Driver for micro:bit*, a przeszkody wykrywa czujnik RCW-0001. Robotem można sterować programem
-(jazda autonomiczna, omijanie przeszkód) albo zdalnie, **pilotem z joystickiem**
-(drugi micro:bit w module Keyestudio KS0296 z joystickiem, połączenie radiowe).
+![Borsuk robots and the remote](images/robots.webp)
 
-To repozytorium łączy w jednym miejscu wszystko, czego potrzeba:
+**Borsuk** (Polish for *badger*) is an educational robot laser-cut from 3 mm plywood and
+controlled by a **BBC micro:bit** (V1 or V2). Motors and servos are driven by the
+*Waveshare Motor Driver for micro:bit*, and obstacles are detected by an RCW-0001 ultrasonic
+sensor. You can program the robot to drive on its own (e.g. obstacle avoidance) or drive it
+with a **joystick remote**: a second micro:bit in a Keyestudio KS0296 joystick board,
+connected over radio.
 
-| Co | Gdzie |
+The robot was designed for robotics workshops for children at FabLab Gdańsk.
+
+This repository has everything in one place:
+
+| What | Where |
 |---|---|
-| Rozszerzenie **MakeCode** (bloki: robot + pilot + radio) | katalog główny: [`borsuk.ts`](borsuk.ts), [`pilot.ts`](pilot.ts), [`remote.ts`](remote.ts) |
-| Biblioteka **MicroPython** (ten sam zestaw funkcji) | [`python/borsuk.py`](python/borsuk.py) |
-| Przykłady MakeCode | [`examples/makecode/`](examples/makecode/) |
-| Przykłady MicroPython | [`examples/micropython/`](examples/micropython/) |
-| Plik do wycinania (DXF) i podgląd | [`hardware/`](hardware/) |
-| STEP robota, STL obudowy pilota | [MakerWorld](https://makerworld.com/en/models/2668556-badger-robot-for-micro-bit), [Printables](https://www.printables.com/model/40102-handle-joystick-for-microbit-module-from-keyestudi) |
-| Dokumentacja | [`docs/`](docs/) |
+| **MakeCode** extension (blocks: robot + remote + radio), English + Polish | repository root: [`borsuk.ts`](borsuk.ts), [`pilot.ts`](pilot.ts), [`remote.ts`](remote.ts) |
+| **MicroPython** library (same set of functions) | [`python/borsuk.py`](python/borsuk.py) |
+| MakeCode examples | [`examples/makecode/`](examples/makecode/) |
+| MicroPython examples | [`examples/micropython/`](examples/micropython/) |
+| Laser-cut file (DXF) and preview | [`hardware/`](hardware/) |
+| Robot STEP file, remote case STL | [MakerWorld](https://makerworld.com/en/models/2668556-badger-robot-for-micro-bit), [Printables](https://www.printables.com/model/40102-handle-joystick-for-microbit-module-from-keyestudi) |
+| Documentation | [`docs/`](docs/) (Polish: [`docs/pl/`](docs/pl/)) |
 
-## Wersje robota
+## Robot versions
 
 | | v1 | v2 |
 |---|---|---|
-| Napęd | 2 × serwo 360° (S0 = lewe, S1 = prawe) | 2 × silnik DC z przekładnią (A = lewy, B = prawy) |
-| Ustawienie w kodzie | `napęd robota: serwa 360° (v1)` | domyślne, nic nie trzeba ustawiać |
+| Drive | 2 × 360° servo (S0 = left, S1 = right) | 2 × geared DC motor (A = left, B = right) |
+| Setting in code | `robot drive: 360° servos (v1)` | default, nothing to set |
 
-![Wizualizacja Borsuka v2](images/borsuk-v2-wizualizacja.webp)
+![Borsuk v2 render](images/borsuk-v2-render.webp)
 
-## Szybki start – MakeCode (bloki)
+## Quick start – MakeCode (blocks)
 
-1. Otwórz <https://makecode.microbit.org> i utwórz nowy projekt.
-2. **Rozszerzenia** → wklej adres `https://github.com/cyryllo/Borsuk` → wybierz *borsuk*.
-3. Pojawią się dwie kategorie: **Borsuk** (robot) i **Borsuk Pilot** (joystick).
-4. Pierwszy program:
+1. Open <https://makecode.microbit.org> and create a new project.
+2. **Extensions** → paste `https://github.com/cyryllo/Borsuk` → choose *borsuk*.
+3. Two categories appear: **Borsuk** (robot) and **Borsuk Remote** (joystick).
+   With the editor language set to Polish, the blocks are in Polish.
+4. First program:
 
    ```blocks
    input.onButtonPressed(Button.A, function () {
@@ -42,21 +48,21 @@ To repozytorium łączy w jednym miejscu wszystko, czego potrzeba:
    })
    ```
 
-5. Sterowanie pilotem – dwa micro:bity, każdy z jednym blokiem:
+5. Remote control – two micro:bits, one block each:
 
-   | micro:bit w **pilocie** | micro:bit w **robocie** |
+   | micro:bit in the **remote** | micro:bit in the **robot** |
    |---|---|
-   | `wysyłaj sterowanie do robota, grupa radiowa 1` | `odbieraj sterowanie z pilota, grupa radiowa 1` |
+   | `send control to robot, radio group 1` | `receive remote control, radio group 1` |
 
-   Każda para pilot + robot w sali musi mieć **inną grupę radiową**.
+   Every remote + robot pair in the room needs a **different radio group**.
 
-Więcej: [docs/makecode.md](docs/makecode.md).
+More: [docs/makecode.md](docs/makecode.md).
 
-## Szybki start – MicroPython
+## Quick start – MicroPython
 
-1. Otwórz <https://python.microbit.org>.
-2. **Project → Open…** i dodaj plik [`python/borsuk.py`](python/borsuk.py) (zostanie dograny na micro:bit).
-3. W `main.py`:
+1. Open <https://python.microbit.org>.
+2. **Project → Open…** and add [`python/borsuk.py`](python/borsuk.py) (it will be copied to the micro:bit).
+3. In `main.py`:
 
    ```python
    from borsuk import Robot, FORWARD
@@ -64,44 +70,45 @@ Więcej: [docs/makecode.md](docs/makecode.md).
    robot.drive_for(FORWARD, 50, 1000)
    ```
 
-Więcej: [docs/micropython.md](docs/micropython.md).
+More: [docs/micropython.md](docs/micropython.md).
 
-## Dokumentacja
+## Documentation
 
-- [Sprzęt, połączenia i budowa](docs/sprzet.md)
-- [Bloki MakeCode – opis wszystkich bloków](docs/makecode.md)
-- [Biblioteka MicroPython](docs/micropython.md)
-- [Sterowanie pilotem przez radio](docs/sterowanie-radiowe.md)
-- [Kalibracja i rozwiązywanie problemów](docs/kalibracja-i-problemy.md)
-- [Przejście ze starych repozytoriów](docs/migracja.md) · [Lista zmian](CHANGELOG.md)
+- [Hardware, wiring and assembly](docs/hardware.md)
+- [MakeCode blocks – reference](docs/makecode.md)
+- [MicroPython library](docs/micropython.md)
+- [Radio remote control](docs/radio-remote.md)
+- [Calibration and troubleshooting](docs/calibration-troubleshooting.md)
+- [Migrating from the old repositories](docs/migration.md) · [Changelog](CHANGELOG.md)
 
-## Rozwój
+## Development
 
 ```bash
-# rozszerzenie MakeCode
+# MakeCode extension
 npm install -g pxt
 pxt target microbit
 pxt install
-pxt build          # kompiluje bibliotekę + test.ts (V1 i V2)
+pxt build          # compiles the library + test.ts (V1 and V2)
 
-# biblioteka MicroPython – testy na komputerze (atrapy modułów micro:bit)
+# MicroPython library – tests on a computer (fake micro:bit modules)
 cd python && python3 -m unittest discover -s tests -v
 
-# podgląd pliku DXF jako SVG
-python3 tools/dxf_podglad.py hardware/Borsuk_v2.dxf hardware/Borsuk_v2_podglad.svg
+# DXF preview as SVG
+python3 tools/dxf_preview.py hardware/Borsuk_v2.dxf hardware/Borsuk_v2_preview.svg
 ```
 
-Oba zestawy testów uruchamia automatycznie GitHub Actions ([`.github/workflows/build.yml`](.github/workflows/build.yml)).
+Both test suites run automatically on GitHub Actions ([`.github/workflows/build.yml`](.github/workflows/build.yml)).
 
-## Pochodzenie
+Block translations live in [`_locales/pl/`](_locales/pl/). After changing a block, regenerate the
+keys with `pxt gendocs --locs` and update the Polish files.
 
-Projekt powstał w FabLab Gdańsk. Łączy wcześniejsze repozytoria
-pxt-Borsuk,
-BorsukPY (to repozytorium, dawniej pod tą nazwą) i
-JoyStick (historia wszystkich trzech jest zachowana tutaj), które z kolei bazowały na
-[waveshare/pxt-Motor](https://github.com/waveshare/pxt-Motor) i
-pxt-WSJoyStick firmy Waveshare.
+## Origin
 
-## Licencja
+Created at FabLab Gdańsk. It merges the earlier repositories pxt-Borsuk, BorsukPY (this
+repository, formerly under that name) and JoyStick – the history of all three is kept here.
+They were based on [waveshare/pxt-Motor](https://github.com/waveshare/pxt-Motor) and
+pxt-WSJoyStick by Waveshare.
+
+## License
 
 [MIT](LICENSE)

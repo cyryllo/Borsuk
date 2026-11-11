@@ -1,4 +1,4 @@
-"""Atrapa modułu microbit do testów na komputerze."""
+"""Fake microbit module for running tests on a computer."""
 _time = [0]
 
 

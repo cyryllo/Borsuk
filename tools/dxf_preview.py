@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Podgląd pliku DXF jako SVG (do wyświetlenia na GitHubie).
+"""DXF preview as SVG (for viewing on GitHub).
 
-Bez zewnętrznych bibliotek. Obsługuje: LINE, CIRCLE, ARC, LWPOLYLINE (z łukami),
-SPLINE (B-spline / NURBS). Jednostki przyjmowane z pliku (Borsuk: mm).
+No external libraries. Supports: LINE, CIRCLE, ARC, LWPOLYLINE (with bulges),
+SPLINE (B-spline / NURBS). Units are taken from the file (Borsuk: mm).
 
-Użycie:
-    python3 tools/dxf_podglad.py hardware/Borsuk_v2.dxf hardware/Borsuk_v2_podglad.svg
+Usage:
+    python3 tools/dxf_preview.py hardware/Borsuk_v2.dxf hardware/Borsuk_v2_preview.svg
 """
 import math
 import sys
@@ -18,7 +18,7 @@ def read_pairs(path):
 
 
 def entities(pairs):
-    """Zwraca listę (typ, [(kod, wartość), ...]) z sekcji ENTITIES."""
+    """Returns a list of (type, [(code, value), ...]) from the ENTITIES section."""
     out, section, cur = [], None, None
     for i, (code, val) in enumerate(pairs):
         if code == "0" and val == "SECTION":
@@ -43,7 +43,7 @@ def first(props, code, default=0.0):
 
 
 def arc_points(cx, cy, r, a0, a1, n=None):
-    """Punkty łuku od kąta a0 do a1 (stopnie, przeciwnie do wskazówek zegara)."""
+    """Arc points from angle a0 to a1 (degrees, counter-clockwise)."""
     while a1 <= a0:
         a1 += 360.0
     n = n or max(8, int((a1 - a0) / 6))
@@ -164,7 +164,7 @@ def main(src, dst):
     ) % (w + 2 * m, h + 2 * m, w + 2 * m, h + 2 * m, d)
     with open(dst, "w") as f:
         f.write(svg)
-    print("Elementów: %d, obszar: %.1f x %.1f mm -> %s" % (len(paths), w, h, dst))
+    print("Entities: %d, area: %.1f x %.1f mm -> %s" % (len(paths), w, h, dst))
 
 
 if __name__ == "__main__":

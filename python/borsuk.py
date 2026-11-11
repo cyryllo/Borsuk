@@ -1,25 +1,25 @@
-# borsuk.py - biblioteka robota Borsuk dla MicroPython (micro:bit V1/V2)
-# https://github.com/cyryllo/Borsuk  (licencja MIT)
+# borsuk.py - Borsuk (Badger) robot library for MicroPython (micro:bit V1/V2)
+# https://github.com/cyryllo/Borsuk  (MIT license)
 #
 # Robot:  Waveshare Motor Driver for micro:bit
-#         silnik A: P8 (PWM), P13, P12   silnik B: P16 (PWM), P14, P15
-#         serwa S0=P0, S1=P1, S2=P2
-# Pilot:  gora=P10 lewo=P11 prawo=P9 dol=P8 select=P7 mode=P6
-#         joystick X=P4 Y=P3 wcisniecie=P5, buzzer=P0
+#         motor A: P8 (PWM), P13, P12   motor B: P16 (PWM), P14, P15
+#         servos S0=P0, S1=P1, S2=P2
+# Remote: Keyestudio KS0296 - up=P10 left=P11 right=P9 down=P8 select=P7 mode=P6
+#         joystick X=P4 Y=P3 press=P5, buzzer=P0
 #
-# Nazwy funkcji sa takie same jak w rozszerzeniu MakeCode (wersja Python).
+# Function names match the MakeCode extension (Python view).
 
 from microbit import pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, pin8, \
     pin9, pin10, pin11, pin12, pin13, pin14, pin15, pin16, display, sleep, \
     running_time
 
-# --- stale
-A, B = 0, 1                     # silniki
-S0, S1, S2 = 0, 1, 2            # serwa
+# --- constants
+A, B = 0, 1                     # motors
+S0, S1, S2 = 0, 1, 2            # servos
 FORWARD, BACKWARD, LEFT, RIGHT = 0, 1, 2, 3
-DC, SERVO360 = 0, 1             # rodzaj napedu (v2 / v1)
+DC, SERVO360 = 0, 1             # drive type (v2 / v1)
 
-# przyciski pilota (numer = bit w ramce radiowej, jak w MakeCode)
+# remote buttons (number = bit in the radio frame, same as MakeCode)
 UP, DOWN, KEY_LEFT, KEY_RIGHT, SELECT, MODE, STICK = 0, 1, 2, 3, 4, 5, 6
 
 _MAGIC, _VERSION = 0x42, 0x01
@@ -35,7 +35,7 @@ class Robot:
         self.drive_mode = drive_mode
         self.motor_reversed = [False, False]
         self.sides_swapped = False
-        self.servo_trim = [0, 0, 0]           # us, kalibracja serw 360
+        self.servo_trim = [0, 0, 0]           # us, 360 servo calibration
         self.servo_min_us, self.servo_max_us = 500, 2500
         self.spin_range_us = 500
         self._pwm = (pin8, pin16)
@@ -44,11 +44,11 @@ class Robot:
         self._servo = (pin0, pin1, pin2)
         self._servo_pwm = [False, False, False]
         self._trig, self._echo = pin1, pin2
-        # stan pilota
+        # remote state
         self.remote_x = self.remote_y = self.remote_keys = 0
         self._last_packet = None
 
-    # ---------------------------------------------------------- silniki DC
+    # ----------------------------------------------------------- DC motors
     def _set_motor(self, motor, speed):
         speed = int(_clamp(speed, -100, 100))
         if self.motor_reversed[motor]:
@@ -66,9 +66,9 @@ class Robot:
         self._in1[motor].write_digital(0)
         self._in2[motor].write_digital(0)
 
-    # --------------------------------------------------------------- serwa
+    # -------------------------------------------------------------- servos
     def _servo_pulse(self, servo, us):
-        # impuls serwa: okres 20 ms, wypelnienie 0..1023
+        # servo pulse: 20 ms period, duty 0..1023
         pin = self._servo[servo]
         pin.write_analog(int(us * 1023 / 20000))
         if not self._servo_pwm[servo]:
@@ -89,7 +89,7 @@ class Robot:
         self._servo[servo].write_digital(0)
         self._servo_pwm[servo] = False
 
-    # --------------------------------------------------------------- jazda
+    # --------------------------------------------------------------- drive
     def _wheel(self, side, speed):
         if self.sides_swapped:
             side = 1 - side
@@ -99,7 +99,7 @@ class Robot:
             else:
                 self._set_motor(side, speed)
         else:
-            # serwa kol zamontowane lustrzanie: S0 = lewe, S1 = prawe
+            # wheel servos are mounted mirrored: S0 = left, S1 = right
             if speed == 0:
                 self.servo_stop(side)
             else:
@@ -137,12 +137,12 @@ class Robot:
             left, right = left * 100 // m, right * 100 // m
         self.tank(left, right)
 
-    # -------------------------------------------------- czujnik odleglosci
+    # ----------------------------------------------------- distance sensor
     def set_distance_sensor(self, trig, echo):
         self._trig, self._echo = trig, echo
 
     def distance(self):
-        """Odleglosc w cm, 0 = brak odczytu."""
+        """Distance in cm, 0 = no reading."""
         from machine import time_pulse_us
         from utime import sleep_us
         self._trig.write_digital(0)
@@ -150,7 +150,7 @@ class Robot:
         self._trig.write_digital(1)
         sleep_us(10)
         self._trig.write_digital(0)
-        self._echo.read_digital()       # przelacz pin w tryb wejscia
+        self._echo.read_digital()       # switch the pin to input mode
         us = time_pulse_us(self._echo, 1, 25000)
         return us // 58 if us > 0 else 0
 
@@ -158,14 +158,14 @@ class Robot:
         d = self.distance()
         return 0 < d < cm
 
-    # ----------------------------------------------------- pilot radiowy
+    # ------------------------------------------------------ radio remote
     def start_remote(self, group=1):
         import radio
         radio.config(group=group, length=32)
         radio.on()
 
     def remote_update(self, auto_drive=True):
-        """Wywoluj czesto w petli. Zwraca maske nowo wcisnietych przyciskow."""
+        """Call often in a loop. Returns a mask of newly pressed buttons."""
         import radio
         pressed = 0
         msg = radio.receive_bytes()
@@ -195,13 +195,13 @@ class Robot:
 
 
 class Pilot:
-    # kolejnosc zgodna z UP, DOWN, KEY_LEFT, KEY_RIGHT, SELECT, MODE, STICK
+    # order matches UP, DOWN, KEY_LEFT, KEY_RIGHT, SELECT, MODE, STICK
     KEY_PINS = (pin10, pin8, pin11, pin9, pin7, pin6, pin5)
     DEADZONE = 8
     DIR_THRESHOLD = 40
 
     def __init__(self):
-        # P3, P4, P6, P7, P9, P10 sa wspoldzielone z wyswietlaczem LED
+        # P3, P4, P6, P7, P9, P10 are shared with the LED display
         display.off()
         for p in self.KEY_PINS:
             p.set_pull(p.PULL_UP)
@@ -227,7 +227,7 @@ class Pilot:
         return k
 
     def was_pressed(self, key):
-        """True tylko raz po wcisnieciu (jak button_a.was_pressed)."""
+        """True only once per press (like button_a.was_pressed)."""
         k = self.keys()
         new = k & ~self._last_keys
         self._last_keys = k
@@ -248,10 +248,10 @@ class Pilot:
         return self._scale(pin3.read_analog(), self.center_y)
 
     def direction(self):
-        """Zwraca '', 'gora', 'dol', 'lewo', 'prawo', 'gora-lewo', ..."""
+        """Returns '', 'up', 'down', 'left', 'right', 'up-left', ..."""
         x, y, t = self.x(), self.y(), self.DIR_THRESHOLD
-        v = 'gora' if y >= t else 'dol' if y <= -t else ''
-        h = 'lewo' if x <= -t else 'prawo' if x >= t else ''
+        v = 'up' if y >= t else 'down' if y <= -t else ''
+        h = 'left' if x <= -t else 'right' if x >= t else ''
         return v + '-' + h if v and h else v or h
 
     def start_sending(self, group=1):
@@ -260,7 +260,7 @@ class Pilot:
         radio.on()
 
     def send(self):
-        """Wyslij jedna ramke sterowania. Wywoluj co ok. 50 ms."""
+        """Send one control frame. Call about every 50 ms."""
         import radio
         radio.send_bytes(bytes([_MAGIC, _VERSION, self.x() & 0xFF,
                                 self.y() & 0xFF, self.keys() & 0x7F]))

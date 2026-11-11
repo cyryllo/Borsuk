@@ -1,17 +1,15 @@
-/**
- * Sterowanie radiowe: pilot -> robot.
- *
- * Ramka (radio.sendBuffer), 5 bajtów:
- *   [0] 0x42 ('B')    – znacznik Borsuka
- *   [1] 0x01          – wersja protokołu
- *   [2] x  (int8)     – joystick X, -100..100
- *   [3] y  (int8)     – joystick Y, -100..100
- *   [4] przyciski     – maska bitowa, bit n = PilotKey n
- */
+// Radio control: remote -> robot.
+//
+// Frame (radio.sendBuffer), 5 bytes:
+//   [0] 0x42 ('B')    – Borsuk marker
+//   [1] 0x01          – protocol version
+//   [2] x  (int8)     – joystick X, -100..100
+//   [3] y  (int8)     – joystick Y, -100..100
+//   [4] buttons       – bit mask, bit n = PilotKey n
 namespace borsuk {
     const MAGIC = 0x42
     const VERSION = 0x01
-    // po takim czasie bez ramki robot się zatrzymuje (failsafe)
+    // the robot stops after this long without a frame (failsafe)
     const TIMEOUT_MS = 500
 
     let remoteStarted = false
@@ -23,7 +21,7 @@ namespace borsuk {
     let rkeys = 0
     let remoteHandlers: (() => void)[] = []
 
-    /** Koduje ramkę sterowania (używane przez pilota). */
+    /** Encodes a control frame (used by the remote). */
     export function encodeControl(x: number, y: number, keys: number): Buffer {
         const buf = pins.createBuffer(5)
         buf[0] = MAGIC
@@ -35,13 +33,13 @@ namespace borsuk {
     }
 
     /**
-     * Odbieraj sterowanie z pilota. Robot sam jeździ zgodnie z joystickiem
-     * i zatrzymuje się, gdy przez pół sekundy nie dostanie sygnału.
-     * @param radioGroup grupa radiowa – taka sama jak w pilocie, eg: 1
+     * Receive control from the remote. The robot drives by the joystick on its own
+     * and stops when it gets no signal for half a second.
+     * @param radioGroup radio group – the same as on the remote, eg: 1
      */
-    //% blockId=borsuk_remote_start block="odbieraj sterowanie z pilota, grupa radiowa %radioGroup"
+    //% blockId=borsuk_remote_start block="receive remote control, radio group %radioGroup"
     //% radioGroup.min=0 radioGroup.max=255 radioGroup.defl=1
-    //% group="Pilot radiowy" weight=70
+    //% group="Remote control" weight=70
     export function startRemote(radioGroup: number): void {
         radio.setGroup(radioGroup)
         if (remoteStarted) return
@@ -75,48 +73,48 @@ namespace borsuk {
     }
 
     /**
-     * Wykonaj kod, gdy na pilocie zostanie wciśnięty przycisk.
+     * Run code when a button is pressed on the remote.
      */
-    //% blockId=borsuk_on_remote_key block="gdy na pilocie wciśnięto %key"
-    //% group="Pilot radiowy" weight=65
+    //% blockId=borsuk_on_remote_key block="on remote %key pressed"
+    //% group="Remote control" weight=65
     export function onRemoteKey(key: PilotKey, handler: () => void): void {
         remoteHandlers[key] = handler
     }
 
     /**
-     * Czy przycisk na pilocie jest teraz wciśnięty?
+     * Is a button on the remote pressed right now?
      */
-    //% blockId=borsuk_remote_key_pressed block="na pilocie wciśnięty %key"
-    //% group="Pilot radiowy" weight=60
+    //% blockId=borsuk_remote_key_pressed block="remote %key is pressed"
+    //% group="Remote control" weight=60
     export function remoteKeyPressed(key: PilotKey): boolean {
         return (rkeys & (1 << key)) != 0
     }
 
     /**
-     * Wychylenie joysticka na pilocie (-100..100).
+     * Joystick deflection on the remote (-100..100).
      */
-    //% blockId=borsuk_remote_axis block="joystick pilota oś %axis"
-    //% group="Pilot radiowy" weight=55
+    //% blockId=borsuk_remote_axis block="remote joystick axis %axis"
+    //% group="Remote control" weight=55
     export function remoteAxis(axis: PilotAxis): number {
         return axis == PilotAxis.X ? rx : ry
     }
 
     /**
-     * Czy robot odbiera sygnał z pilota?
+     * Is the robot receiving the remote's signal?
      */
-    //% blockId=borsuk_remote_connected block="pilot połączony"
-    //% group="Pilot radiowy" weight=50
+    //% blockId=borsuk_remote_connected block="remote connected"
+    //% group="Remote control" weight=50
     export function isRemoteConnected(): boolean {
         return remoteConnected
     }
 
     /**
-     * Włącz/wyłącz automatyczną jazdę joystickiem. Wyłącz, jeśli chcesz
-     * sam decydować, co robi robot (np. jazda na przyciskach).
+     * Turn automatic joystick driving on/off. Turn it off if you want to
+     * decide yourself what the robot does (e.g. driving with buttons).
      */
-    //% blockId=borsuk_remote_autodrive block="jazda joystickiem pilota %on"
+    //% blockId=borsuk_remote_autodrive block="drive with remote joystick %on"
     //% on.shadow="toggleOnOff" on.defl=true
-    //% group="Pilot radiowy" weight=45
+    //% group="Remote control" weight=45
     export function setRemoteAutoDrive(on: boolean): void {
         remoteAutoDrive = on
         if (!on) stop()
