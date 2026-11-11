@@ -206,7 +206,7 @@ namespace borsuk {
     // ------------------------------------------------------- Czujnik odległości
 
     /**
-     * Ustaw piny czujnika ultradźwiękowego (HC-SR04P / RCWL-1601).
+     * Ustaw piny czujnika ultradźwiękowego (RCW-0001, HC-SR04P, RCWL-1601).
      * Dla czujnika Grove (jeden pin sygnałowy) wybierz ten sam pin dwa razy.
      * @param trig pin TRIG, eg: DigitalPin.P1
      * @param echo pin ECHO, eg: DigitalPin.P2

@@ -2,11 +2,11 @@
 
 ![Roboty Borsuk i pilot](images/roboty.webp)
 
-**Borsuk** to edukacyjny robot wycinany laserowo ze sklejki 3 mm, sterowany przez
+**Borsuk** (ang. *Badger*) to edukacyjny robot wycinany laserowo ze sklejki 3 mm, sterowany przez
 **BBC micro:bit** (V1 lub V2). Napęd i serwa obsługuje płytka
-*Waveshare Motor Driver for micro:bit*. Robotem można sterować programem
+*Waveshare Motor Driver for micro:bit*, a przeszkody wykrywa czujnik RCW-0001. Robotem można sterować programem
 (jazda autonomiczna, omijanie przeszkód) albo zdalnie, **pilotem z joystickiem**
-(drugi micro:bit, połączenie radiowe).
+(drugi micro:bit w module Keyestudio Handle Joystick, połączenie radiowe).
 
 To repozytorium łączy w jednym miejscu wszystko, czego potrzeba:
 
@@ -17,6 +17,7 @@ To repozytorium łączy w jednym miejscu wszystko, czego potrzeba:
 | Przykłady MakeCode | [`examples/makecode/`](examples/makecode/) |
 | Przykłady MicroPython | [`examples/micropython/`](examples/micropython/) |
 | Plik do wycinania (DXF) i podgląd | [`hardware/`](hardware/) |
+| STEP robota, STL obudowy pilota | [MakerWorld](https://makerworld.com/en/models/2668556-badger-robot-for-micro-bit), [Printables](https://www.printables.com/model/40102-handle-joystick-for-microbit-module-from-keyestudi) |
 | Dokumentacja | [`docs/`](docs/) |
 
 ## Wersje robota

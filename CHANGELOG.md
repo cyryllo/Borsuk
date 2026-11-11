@@ -12,7 +12,7 @@ Repozytoria **pxt-Borsuk**, **BorsukPY** i **JoyStick** połączone w jeden proj
   `steruj jak joystickiem` – działają tak samo dla v1 (serwa 360°) i v2 (silniki DC).
 - Sterowanie radiowe pilot → robot jednym blokiem po każdej stronie, z **failsafe**
   (robot staje po 0,5 s bez sygnału) i zdarzeniami przycisków pilota.
-- Czujnik odległości (HC-SR04P / RCWL-1601 / Grove): `odległość (cm)`, `przeszkoda bliżej niż`.
+- Czujnik odległości (RCW-0001, HC-SR04P, RCWL-1601, Grove): `odległość (cm)`, `przeszkoda bliżej niż`.
 - Ustawienia: odwracanie silników, zamiana stron, kalibracja serw 360°, zakres serw.
 - Biblioteka MicroPython w jednym pliku (`Robot` + `Pilot`) z tymi samymi funkcjami,
   w tym jazda na serwach 360° i radio.

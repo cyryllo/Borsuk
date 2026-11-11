@@ -26,9 +26,17 @@
 
 ![Borsuk v2](../images/borsuk-v2-wizualizacja.webp)
 
+## Pozostałe pliki
+
+Na [MakerWorld (Badger robot for micro:bit)](https://makerworld.com/en/models/2668556-badger-robot-for-micro-bit)
+jest plik **STEP** (do dalszego rozwoju konstrukcji) i **STL obudowy pilota**.
+Obudowa pilota jest też na
+[Printables](https://www.printables.com/model/40102-handle-joystick-for-microbit-module-from-keyestudi).
+
+Montaż: silniki 4 × M3 × 25 z nakrętkami, sterownik 4 × M3 × 10, korpus klejony
+klejem do drewna. Pełna lista części: [docs/sprzet.md](../docs/sprzet.md).
+
 ## Do uzupełnienia
 
-- [ ] plik projektu CAD (źródłowy, np. Fusion 360 / FreeCAD), jeśli ma być edytowalny
-- [ ] DXF wersji v1 (serwa 360°), jeśli różni się od v2
 - [ ] instrukcja składania krok po kroku (zdjęcia)
-- [ ] dokładna lista śrub i dystansów
+- [ ] DXF wersji v1 (serwa 360°), jeśli różni się od v2

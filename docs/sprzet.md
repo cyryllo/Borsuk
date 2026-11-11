@@ -1,19 +1,37 @@
 # Sprzęt, połączenia i budowa
 
+## Pliki projektu
+
+- **MakerWorld** – robot *Badger* (Borsuk): <https://makerworld.com/en/models/2668556-badger-robot-for-micro-bit>
+  (pliki do cięcia, plik STEP do dalszego rozwoju, STL obudowy pilota)
+- **Printables** – obudowa pilota (Handle Joystick for micro:bit, Keyestudio):
+  <https://www.printables.com/model/40102-handle-joystick-for-microbit-module-from-keyestudi>
+- DXF robota v2 jest też w tym repozytorium: [`hardware/Borsuk_v2.dxf`](../hardware/Borsuk_v2.dxf)
+
 ## Lista części (robot v2)
 
 | Część | Ilość | Uwagi |
 |---|---|---|
+| Sklejka 3 mm | arkusz min. 160 × 370 mm | do cięcia laserem, plik [`Borsuk_v2.dxf`](../hardware/Borsuk_v2.dxf) |
+| Klej do drewna | | do sklejenia korpusu |
 | BBC micro:bit V1 lub V2 | 1 | V2 zalecany (więcej pamięci, głośnik) |
-| Waveshare *Motor Driver for micro:bit* | 1 | sterownik 2 silników DC + 3 złącza serw |
-| Silnik DC z przekładnią („żółty TT”) + koło | 2 | wersja v1: 2 × serwo 360° (np. FS90R) |
-| Ultradźwiękowy czujnik odległości | 1 | z logiką **3,3 V** (model do uzupełnienia), patrz niżej |
-| Kółko podporowe / ślizg | 1 | |
-| Koszyk na akumulatory | 1 | na wizualizacji: 2 ogniwa z tyłu robota |
-| Sklejka 3 mm | arkusz min. 160 × 370 mm | plik [`hardware/Borsuk_v2.dxf`](../hardware/Borsuk_v2.dxf) |
-| Śruby M2/M2,5/M3 + nakrętki | kpl. | otwory Ø2,3–2,4 mm i Ø3 mm |
+| Waveshare **Motor Driver for micro:bit** (nr 15220) | 1 | sterownik 2 silników DC + 3 złącza serw |
+| Silnik z przekładnią, wał dwustronny (*Dual Shaft Gear Motor*, „żółty TT”) z kołem | 2 | wersja v1: 2 × serwo 360° |
+| Czujnik odległości **RCW-0001** | 1 | ultradźwiękowy, TRIG/ECHO, pracuje przy 3,3 V |
+| Koszyk na 2 × 18650 (połączenie szeregowe) | 1 | |
+| Akumulator Li-ion 18650 | 2 | razem ok. 7,4 V |
+| Śruba M3 × 25 | 4 | mocowanie silników |
+| Śruba M3 × 10 | 4 | mocowanie sterownika silników |
+| Nakrętka M3 | 4 | |
+| Przewody | | czujnik ↔ płytka sterownika, zasilanie |
 
-> *Uzupełnij typ akumulatorów, kółka podporowego i śrub, jeśli różnią się od Twojej wersji.*
+### Pilot (opcjonalnie)
+
+| Część | Ilość | Uwagi |
+|---|---|---|
+| BBC micro:bit V1 lub V2 | 1 | drugi micro:bit |
+| **Keyestudio Handle Joystick for micro:bit** | 1 | joystick, 6 przycisków, buzzer |
+| Obudowa z drukarki 3D | 1 | STL na Printables / MakerWorld (linki wyżej) |
 
 ## Wycinanie i składanie
 
@@ -45,24 +63,26 @@ micro:bit wkłada się w złącze krawędziowe sterownika Waveshare. Piny są st
 Wolne piny do czujników: P1, P2 (gdy nie używasz S1/S2), P5 i P11 (przyciski A/B),
 P19/P20 (I²C), a po wyłączeniu wyświetlacza (`led.enable(false)`) także P3, P4, P6, P7, P9, P10.
 
-### Czujnik odległości – uwaga na 5 V!
+### Czujnik odległości RCW-0001
 
-W robotach Borsuk używamy czujnika z logiką **3,3 V**, podłączonego do wolnych pinów
-złącza płytki rozszerzeń. Piny ustawiasz blokiem `czujnik odległości TRIG … ECHO …`
+Borsuk używa czujnika **RCW-0001**: działa przy 3,3 V, więc podłącza się go bezpośrednio
+do micro:bita, bez dzielnika napięcia. Ma 4 wyprowadzenia: VCC, TRIG, ECHO, GND.
+Sygnały TRIG i ECHO podłącz do wolnych pinów na złączu płytki sterownika, a w programie
+ustaw te same piny blokiem `czujnik odległości TRIG … ECHO …`
 (MicroPython: `robot.set_distance_sensor(trig, echo)`).
 
-> *Do uzupełnienia: dokładny model czujnika i numery pinów.*
+> *Do uzupełnienia: numery pinów TRIG/ECHO używane w robotach FabLabu.*
 
-Jeśli kupujesz czujnik samodzielnie:
-
-Klasyczny **HC-SR04** wymaga 5 V i oddaje na pinie ECHO sygnał **5 V**, który może
-**uszkodzić micro:bita** (wejścia tolerują maks. 3,6 V). Użyj:
-
-- **HC-SR04P** lub **RCWL-1601** – działają z 3,3 V, podłączasz bezpośrednio,
-- albo dzielnika napięcia na ECHO (np. 1 kΩ + 2 kΩ),
-- albo czujnika **Grove Ultrasonic Ranger** (jeden pin sygnałowy – w bloku ustaw TRIG = ECHO).
+**Uwaga przy zamiennikach:** klasyczny **HC-SR04** wymaga 5 V i oddaje na ECHO sygnał
+**5 V**, który może **uszkodzić micro:bita** (wejścia tolerują maks. 3,6 V). Jeśli nie masz
+RCW-0001, wybierz **HC-SR04P** lub **RCWL-1601** (oba działają przy 3,3 V), daj dzielnik
+napięcia na ECHO (np. 1 kΩ + 2 kΩ) albo użyj czujnika **Grove Ultrasonic Ranger**
+(jeden pin sygnałowy – w bloku ustaw TRIG = ECHO).
 
 ## Pilot
+
+Pilot to moduł **Keyestudio Handle Joystick for micro:bit** w drukowanej obudowie
+([Printables](https://www.printables.com/model/40102-handle-joystick-for-microbit-module-from-keyestudi)).
 
 ![Pilot z joystickiem](../images/pilot-joystick.jpg)
 
@@ -94,6 +114,9 @@ wyświetlacza; zamiast tego używaj dźwięku (buzzer na P0, bloki *Muzyka*).
 
 ## Zasilanie
 
-- Silniki/serwa zasila sterownik Waveshare ze swojego źródła (koszyk akumulatorów).
-- Gdy robot się „resetuje” przy ruszaniu, akumulatory są za słabe albo rozładowane.
-- Pilot można zasilać z USB, z koszyka 2 × AAA micro:bita lub z gniazda DC na płytce pilota.
+- Robot: **2 × 18650 połączone szeregowo** (ok. 7,4 V, do 8,4 V po naładowaniu) do wejścia
+  zasilania sterownika Waveshare. Sterownik zasila silniki i micro:bita.
+- Używaj ogniw z zabezpieczeniem (PCB) i ładuj je ładowarką do Li-ion. Nie zostawiaj
+  robota z włączonym zasilaniem bez nadzoru.
+- Gdy robot „resetuje się” przy ruszaniu, akumulatory są rozładowane.
+- Pilot można zasilać z USB, z koszyka 2 × AAA micro:bita albo przez złącze zasilania na płytce pilota.

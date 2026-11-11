@@ -34,7 +34,7 @@ Bloki mają polskie opisy. W widoku JavaScript/Python funkcje mają angielskie n
 | odległość (cm) | `borsuk.distance()` | 0 = brak odczytu (nic w zasięgu ~4 m) |
 | przeszkoda bliżej niż **20** cm | `borsuk.obstacleCloserThan(cm)` | prawda/fałsz; brak odczytu = brak przeszkody |
 
-Przed podłączeniem przeczytaj [uwagę o 5 V](sprzet.md#czujnik-odległości--uwaga-na-5-v).
+Podłączenie czujnika RCW-0001 i uwagi o zamiennikach: [sprzęt](sprzet.md#czujnik-odległości-rcw-0001).
 
 ### Silniki DC
 
