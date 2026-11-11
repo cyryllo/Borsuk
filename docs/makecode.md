@@ -4,7 +4,7 @@
 
 1. <https://makecode.microbit.org> → **Nowy projekt**.
 2. Koło zębate → **Rozszerzenia** (albo kategoria *Rozszerzenia* na dole listy bloków).
-3. Wklej `https://github.com/cyryllo/BorsukPY` i kliknij znalezione rozszerzenie **borsuk**.
+3. Wklej `https://github.com/cyryllo/Borsuk` i kliknij znalezione rozszerzenie **borsuk**.
 
 To samo rozszerzenie dodajesz w programie robota i w programie pilota.
 Rozszerzenie dodaje też *Radio* (jest potrzebne do pilota).

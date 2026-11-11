@@ -31,7 +31,7 @@ To repozytorium łączy w jednym miejscu wszystko, czego potrzeba:
 ## Szybki start – MakeCode (bloki)
 
 1. Otwórz <https://makecode.microbit.org> i utwórz nowy projekt.
-2. **Rozszerzenia** → wklej adres `https://github.com/cyryllo/BorsukPY` → wybierz *borsuk*.
+2. **Rozszerzenia** → wklej adres `https://github.com/cyryllo/Borsuk` → wybierz *borsuk*.
 3. Pojawią się dwie kategorie: **Borsuk** (robot) i **Borsuk Pilot** (joystick).
 4. Pierwszy program:
 
@@ -96,7 +96,7 @@ Oba zestawy testów uruchamia automatycznie GitHub Actions ([`.github/workflows/
 
 Projekt powstał w FabLab Gdańsk. Łączy wcześniejsze repozytoria
 pxt-Borsuk,
-BorsukPY (to repozytorium) i
+BorsukPY (to repozytorium, dawniej pod tą nazwą) i
 JoyStick (historia wszystkich trzech jest zachowana tutaj), które z kolei bazowały na
 [waveshare/pxt-Motor](https://github.com/waveshare/pxt-Motor) i
 pxt-WSJoyStick firmy Waveshare.

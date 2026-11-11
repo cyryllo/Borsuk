@@ -4,7 +4,7 @@
 
 1. W projekcie usuń stare rozszerzenie (*pxt-Borsuk* / *JoyStick_Borsuk*):
    **Eksplorator** (pod symulatorem) → *Rozszerzenia* → kosz.
-2. Dodaj nowe: `https://github.com/cyryllo/BorsukPY`.
+2. Dodaj nowe: `https://github.com/cyryllo/Borsuk`.
 3. Zamień bloki według tabeli (prędkości są teraz w %).
 
 | Stare (pxt-Borsuk) | Nowe |
