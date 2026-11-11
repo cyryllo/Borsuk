@@ -1,0 +1,25 @@
+{
+    "name": "borsuk",
+    "version": "1.0.0",
+    "description": "Robot Borsuk (sklejka + micro:bit): jazda, serwa, czujnik odległości, pilot z joystickiem i sterowanie radiowe",
+    "license": "MIT",
+    "dependencies": {
+        "core": "*",
+        "radio": "*"
+    },
+    "files": [
+        "README.md",
+        "icon.png",
+        "borsuk.ts",
+        "pilot.ts",
+        "remote.ts"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "blocksprj",
+    "public": true
+}

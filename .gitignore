@@ -1,0 +1,12 @@
+built/
+node_modules/
+pxt_modules/
+yotta_modules/
+yotta_targets/
+_site/
+*.db
+*.tgz
+.header.json
+.simstate.json
+__pycache__/
+*.pyc

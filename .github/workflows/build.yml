@@ -1,0 +1,44 @@
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  makecode:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Instalacja pxt i targetu micro:bit
+        run: |
+          npm install -g pxt
+          pxt target microbit
+          pxt install
+      - name: Kompilacja rozszerzenia (test.ts)
+        run: pxt build
+      - name: Kompilacja przykładów
+        run: |
+          cp test.ts /tmp/test.ts.bak
+          for f in examples/makecode/*.ts; do
+            echo "::group::$f"
+            cp "$f" test.ts
+            pxt build
+            echo "::endgroup::"
+          done
+          cp /tmp/test.ts.bak test.ts
+
+  micropython:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Składnia
+        run: python -m py_compile python/borsuk.py examples/micropython/*.py tools/*.py
+      - name: Testy biblioteki
+        working-directory: python
+        run: python -m unittest discover -s tests -v
