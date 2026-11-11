@@ -15,7 +15,7 @@
 | Sklejka 3 mm | arkusz min. 160 × 370 mm | do cięcia laserem, plik [`Borsuk_v2.dxf`](../hardware/Borsuk_v2.dxf) |
 | Klej do drewna | | do sklejenia korpusu |
 | BBC micro:bit V1 lub V2 | 1 | V2 zalecany (więcej pamięci, głośnik) |
-| Waveshare **Motor Driver for micro:bit** (nr 15220) | 1 | sterownik 2 silników DC + 3 złącza serw |
+| Waveshare **Motor Driver for micro:bit** (nr 15220) | 1 | sterownik 2 silników DC + 3 złącza serw, np. [Botland](https://botland.com.pl/microbit-rozszerzenia/13303-sterownik-2-silnikow-i-3-serwomechanizmow-i2c-dla-bbc-microbit-waveshare-15220-5904422320447.html) |
 | Silnik z przekładnią, wał dwustronny (*Dual Shaft Gear Motor*, „żółty TT”) z kołem | 2 | wersja v1: 2 × serwo 360° |
 | Czujnik odległości **RCW-0001** | 1 | ultradźwiękowy, TRIG/ECHO, pracuje przy 3,3 V |
 | Koszyk na 2 × 18650 (połączenie szeregowe) | 1 | |
@@ -50,6 +50,11 @@ Więcej w [`hardware/README.md`](../hardware/README.md).
 ## Sterownik silników – Waveshare Motor Driver for micro:bit
 
 Dokumentacja producenta: [Waveshare Wiki – Motor Driver for micro:bit](https://www.waveshare.com/wiki/Motor_Driver_for_micro:bit)
+
+> **Uwaga na opis w sklepach:** niektóre sklepy (np. Botland) podają „interfejs I2C,
+> 12 bitów”. To błąd – na schemacie producenta nie ma układu I2C. TB6612FNG jest
+> sterowany **bezpośrednio pinami** micro:bita: PWMA = P8, AIN1 = P13, AIN2 = P12,
+> PWMB = P16, BIN1 = P14, BIN2 = P15 (STBY na stałe do 3V3). Tak działa ta biblioteka.
 
 | Parametr | Wartość |
 |---|---|
