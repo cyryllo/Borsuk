@@ -46,7 +46,7 @@ Zamiast `borsuk.py` + `joystick.py` jest jeden nowy [`python/borsuk.py`](../pyth
 
 ## Grove_rpipico
 
-Repozytorium *Grove_rpipico* dotyczy **Raspberry Pi Pico** (inny mikrokontroler), więc nie
+Repozytorium [Grove_rpipico](https://github.com/cyryllo/Grove_rpipico) dotyczy **Raspberry Pi Pico** (inny mikrokontroler), więc nie
 zostało włączone do biblioteki micro:bita. Czujnik odległości – jedyny moduł potrzebny
 robotowi – jest obsługiwany bezpośrednio przez bibliotekę Borsuka (także czujnik Grove
 Ultrasonic Ranger).
