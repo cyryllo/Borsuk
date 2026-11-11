@@ -80,7 +80,7 @@ micro:bit wkłada się w złącze krawędziowe sterownika Waveshare. Piny są st
 | Serwo S0 (v1: lewe koło) | P0 |
 | Serwo S1 (v1: prawe koło) | P1 |
 | Serwo S2 (np. „głowa”, chwytak) | P2 |
-| Czujnik odległości TRIG / ECHO | w wersji v2 zwykle złącza S1 / S2 = **P1 / P2** (domyślne w bibliotece) – do potwierdzenia |
+| Czujnik odległości TRIG / ECHO | dwa z wolnych złączy S0–S2 (P0 / P1 / P2); domyślnie w bibliotece P1 / P2 |
 
 Wolne piny do czujników: P1, P2 (gdy nie używasz S1/S2), P5 i P11 (przyciski A/B),
 P19/P20 (I²C), a po wyłączeniu wyświetlacza (`led.enable(false)`) także P3, P4, P6, P7, P9, P10.
@@ -93,16 +93,28 @@ Sygnały TRIG i ECHO podłącz do wolnych pinów na złączu płytki sterownika,
 ustaw te same piny blokiem `czujnik odległości TRIG … ECHO …`
 (MicroPython: `robot.set_distance_sensor(trig, echo)`).
 
-W robocie v2 (silniki DC) złącza serw S1 i S2 są wolne, więc najprościej podłączyć
-TRIG do sygnału S1 (**P1**), a ECHO do sygnału S2 (**P2**). Tak ustawiona jest biblioteka,
-więc wtedy nie trzeba nic konfigurować.
+Z przodu sterownika są trzy złącza serw **S0 / S1 / S2 = P0 / P1 / P2**. W robocie v2
+(silniki DC) wszystkie są wolne i to do nich podłącza się czujnik (TRIG i ECHO do pinów
+sygnałowych dwóch złączy).
+
+**Nie wiesz, na których pinach jest czujnik?** Wgraj wykrywacz
+([MakeCode](../examples/makecode/08-znajdz-piny-czujnika.ts) /
+[MicroPython](../examples/micropython/07_znajdz_piny_czujnika.py)), postaw rękę
+10–50 cm przed czujnikiem i wciśnij A. Na wyświetlaczu pojawi się np. `T0 E1 23`
+= TRIG na P0, ECHO na P1, 23 cm. Potem ustaw te piny blokiem
+`czujnik odległości TRIG … ECHO …` na początku programu
+(domyślnie biblioteka używa TRIG = P1, ECHO = P2).
+
+Jeśli czujnik jest na **S0 (P0)**: micro:bit V2 gra dźwięk także na P0, więc bloki
+*Muzyka* w robocie mogą zakłócać pomiar. W takim robocie nie graj melodii albo
+przełóż czujnik na S1/S2.
 
 > **Uwaga:** środkowy pin złączy serw daje **5 V**, a nie 3,3 V. Jeśli zasilasz
 > czujnik z tego złącza, sprawdź, czy jego ECHO nie oddaje 5 V (miernikiem albo w
 > dokumentacji modułu). Najbezpieczniej zasilić RCW-0001 z **3,3 V** micro:bita
-> (pin 3V na złączu krawędziowym), a z S1/S2 brać tylko sygnały i GND.
+> (pin 3V na złączu krawędziowym), a ze złączy serw brać tylko sygnały i GND.
 
-> *Do potwierdzenia: czy roboty FabLabu mają czujnik na P1/P2 i skąd jest zasilany.*
+> *Do potwierdzenia: piny czujnika w robotach FabLabu (wykrywacz powyżej) i skąd jest zasilany.*
 
 **Uwaga przy zamiennikach:** klasyczny **HC-SR04** wymaga 5 V i oddaje na ECHO sygnał
 **5 V**, który może **uszkodzić micro:bita** (wejścia tolerują maks. 3,6 V). Jeśli nie masz

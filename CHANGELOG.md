@@ -16,7 +16,7 @@ Repozytoria **pxt-Borsuk**, **BorsukPY** i **JoyStick** połączone w jeden proj
 - Ustawienia: odwracanie silników, zamiana stron, kalibracja serw 360°, zakres serw.
 - Biblioteka MicroPython w jednym pliku (`Robot` + `Pilot`) z tymi samymi funkcjami,
   w tym jazda na serwach 360° i radio.
-- Przykłady (7 × MakeCode, 6 × MicroPython), pełna dokumentacja po polsku.
+- Przykłady (8 × MakeCode, 7 × MicroPython, w tym wykrywacz pinów czujnika), pełna dokumentacja po polsku.
 - Plik DXF konstrukcji v2 + podgląd SVG + skrypt `tools/dxf_podglad.py`.
 - CI (GitHub Actions): kompilacja rozszerzenia i wszystkich przykładów, testy biblioteki Python.
 

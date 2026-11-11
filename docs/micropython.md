@@ -104,6 +104,7 @@ pilot = Pilot()        # wyłącza wyświetlacz LED, kalibruje środek joysticka
 | [04_omijanie_przeszkod.py](../examples/micropython/04_omijanie_przeszkod.py) | robot |
 | [05_test_pilota.py](../examples/micropython/05_test_pilota.py) | pilot |
 | [06_kalibracja.py](../examples/micropython/06_kalibracja.py) | robot |
+| [07_znajdz_piny_czujnika.py](../examples/micropython/07_znajdz_piny_czujnika.py) | robot |
 
 ## Uwagi
 

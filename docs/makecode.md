@@ -106,5 +106,6 @@ wróć do **Bloków**.
 | [05-omijanie-przeszkod.ts](../examples/makecode/05-omijanie-przeszkod.ts) | robot | jazda autonomiczna z czujnikiem odległości |
 | [06-test-pilota.ts](../examples/makecode/06-test-pilota.ts) | pilot | test przycisków i joysticka (dźwięk + konsola) |
 | [07-kalibracja.ts](../examples/makecode/07-kalibracja.ts) | robot | ustawianie kierunków i serw 360° |
+| [08-znajdz-piny-czujnika.ts](../examples/makecode/08-znajdz-piny-czujnika.ts) | robot | wykrywa, na których pinach (P0/P1/P2) jest czujnik odległości |
 
 Wszystkie przykłady są kompilowane w CI, więc na pewno działają z bieżącą wersją rozszerzenia.
