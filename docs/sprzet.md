@@ -30,7 +30,7 @@
 | Część | Ilość | Uwagi |
 |---|---|---|
 | BBC micro:bit V1 lub V2 | 1 | drugi micro:bit |
-| **Keyestudio Handle Joystick for micro:bit** | 1 | joystick, 6 przycisków, buzzer |
+| **Keyestudio KS0296** Joystick Breakout Board for micro:bit | 1 | joystick + 6 przycisków, gniazdo DC 4,75–12 V |
 | Obudowa z drukarki 3D | 1 | STL na Printables / MakerWorld (linki wyżej) |
 
 ## Wycinanie i składanie
@@ -81,8 +81,10 @@ napięcia na ECHO (np. 1 kΩ + 2 kΩ) albo użyj czujnika **Grove Ultrasonic Ran
 
 ## Pilot
 
-Pilot to moduł **Keyestudio Handle Joystick for micro:bit** w drukowanej obudowie
-([Printables](https://www.printables.com/model/40102-handle-joystick-for-microbit-module-from-keyestudi)).
+Pilot to moduł **Keyestudio KS0296 Joystick Breakout Board for micro:bit** w drukowanej
+obudowie ([Printables](https://www.printables.com/model/40102-handle-joystick-for-microbit-module-from-keyestudi)).
+Oryginalna strona producenta już nie działa – kopia w archiwum:
+[KS0296 (Web Archive)](https://web.archive.org/web/2024/https://wiki.keyestudio.com/KS0296_Keyestudio_Joystick_Breakout_Board_for_micro_bit). Poniższy pinout jest zgodny z dokumentacją producenta.
 
 ![Pilot z joystickiem](../images/pilot-joystick.jpg)
 
@@ -96,11 +98,14 @@ Pilot to moduł **Keyestudio Handle Joystick for micro:bit** w drukowanej obudow
 | Mode | P6 |
 | Joystick X / Y | P4 / P3 |
 | Wciśnięcie joysticka | P5 (= przycisk A micro:bita) |
-| Buzzer | P0 |
+| Buzzer (jeśli jest w Twojej wersji / obudowie) | P0 |
 
 Piny P3, P4, P6, P7, P9 i P10 są współdzielone z **wyświetlaczem LED** micro:bita,
 dlatego biblioteka **wyłącza wyświetlacz** w pilocie. Nie używaj w pilocie bloków
 wyświetlacza; zamiast tego używaj dźwięku (buzzer na P0, bloki *Muzyka*).
+
+Na płytce jest też osobne złącze **3V, G, P0, P1** (np. do modułu Bluetooth/UART).
+Wejście zasilania: gniazdo DC **4,75–12 V** (stabilizator AMS1117 zasila micro:bita).
 
 ## micro:bit V1 a V2
 
@@ -119,4 +124,4 @@ wyświetlacza; zamiast tego używaj dźwięku (buzzer na P0, bloki *Muzyka*).
 - Używaj ogniw z zabezpieczeniem (PCB) i ładuj je ładowarką do Li-ion. Nie zostawiaj
   robota z włączonym zasilaniem bez nadzoru.
 - Gdy robot „resetuje się” przy ruszaniu, akumulatory są rozładowane.
-- Pilot można zasilać z USB, z koszyka 2 × AAA micro:bita albo przez złącze zasilania na płytce pilota.
+- Pilot można zasilać z USB, z koszyka 2 × AAA micro:bita albo z gniazda DC płytki KS0296 (4,75–12 V).

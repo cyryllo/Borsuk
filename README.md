@@ -6,7 +6,7 @@
 **BBC micro:bit** (V1 lub V2). Napęd i serwa obsługuje płytka
 *Waveshare Motor Driver for micro:bit*, a przeszkody wykrywa czujnik RCW-0001. Robotem można sterować programem
 (jazda autonomiczna, omijanie przeszkód) albo zdalnie, **pilotem z joystickiem**
-(drugi micro:bit w module Keyestudio Handle Joystick, połączenie radiowe).
+(drugi micro:bit w module Keyestudio KS0296 z joystickiem, połączenie radiowe).
 
 To repozytorium łączy w jednym miejscu wszystko, czego potrzeba:
 
