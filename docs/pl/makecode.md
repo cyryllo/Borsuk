@@ -113,3 +113,5 @@ wróć do **Bloków**.
 | [08-find-sensor-pins.ts](../../examples/makecode/08-find-sensor-pins.ts) | robot | wykrywa, na których pinach (P0/P1/P2/P19/P20) jest czujnik odległości |
 
 Wszystkie przykłady są kompilowane w CI, więc na pewno działają z bieżącą wersją rozszerzenia.
+
+**Obrazki bloków** każdego przykładu (po polsku): [examples/makecode/README.pl.md](../../examples/makecode/README.pl.md).

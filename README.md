@@ -40,7 +40,7 @@ This repository has everything in one place:
 2. **Extensions** → paste `https://github.com/cyryllo/Borsuk` → choose *borsuk*.
 3. Two categories appear: **Borsuk** (robot) and **Borsuk Remote** (joystick).
    With the editor language set to Polish, the blocks are in Polish.
-4. First program:
+4. First program (more in [examples/makecode](examples/makecode/README.md)):
 
    ```blocks
    input.onButtonPressed(Button.A, function () {
@@ -95,6 +95,10 @@ cd python && python3 -m unittest discover -s tests -v
 
 # DXF preview as SVG
 python3 tools/dxf_preview.py hardware/Borsuk_v2.dxf hardware/Borsuk_v2_preview.svg
+
+# block images of the examples (en + pl) – after pushing to GitHub
+npm install --no-save playwright-core && npx playwright-core install chromium
+node tools/render_blocks.mjs
 ```
 
 Both test suites run automatically on GitHub Actions ([`.github/workflows/build.yml`](.github/workflows/build.yml)).

@@ -36,7 +36,7 @@ To repozytorium łączy w jednym miejscu wszystko, czego potrzeba:
 1. Otwórz <https://makecode.microbit.org> i utwórz nowy projekt.
 2. **Rozszerzenia** → wklej adres `https://github.com/cyryllo/Borsuk` → wybierz *borsuk*.
 3. Pojawią się dwie kategorie: **Borsuk** (robot) i **Borsuk Pilot** (joystick).
-4. Pierwszy program:
+4. Pierwszy program (więcej w [examples/makecode](examples/makecode/README.pl.md)):
 
    ```blocks
    input.onButtonPressed(Button.A, function () {
@@ -91,6 +91,10 @@ cd python && python3 -m unittest discover -s tests -v
 
 # podgląd pliku DXF jako SVG
 python3 tools/dxf_preview.py hardware/Borsuk_v2.dxf hardware/Borsuk_v2_preview.svg
+
+# obrazki bloków przykładów (en + pl) – po wypchnięciu na GitHub
+npm install --no-save playwright-core && npx playwright-core install chromium
+node tools/render_blocks.mjs
 ```
 
 Oba zestawy testów uruchamia automatycznie GitHub Actions ([`.github/workflows/build.yml`](.github/workflows/build.yml)).

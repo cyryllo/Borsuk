@@ -111,3 +111,5 @@ add the extension → switch to **JavaScript** → paste the file → switch bac
 | [08-find-sensor-pins.ts](../examples/makecode/08-find-sensor-pins.ts) | robot | finds which pins (P0/P1/P2/P19/P20) the distance sensor is on |
 
 All examples are compiled in CI, so they work with the current version of the extension.
+
+**Block images** of every example: [examples/makecode/README.md](../examples/makecode/README.md).
