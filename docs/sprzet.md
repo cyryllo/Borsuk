@@ -83,8 +83,8 @@ napięcia na ECHO (np. 1 kΩ + 2 kΩ) albo użyj czujnika **Grove Ultrasonic Ran
 
 Pilot to moduł **Keyestudio KS0296 Joystick Breakout Board for micro:bit** w drukowanej
 obudowie ([Printables](https://www.printables.com/model/40102-handle-joystick-for-microbit-module-from-keyestudi)).
-Oryginalna strona producenta już nie działa – kopia w archiwum:
-[KS0296 (Web Archive)](https://web.archive.org/web/2024/https://wiki.keyestudio.com/KS0296_Keyestudio_Joystick_Breakout_Board_for_micro_bit). Poniższy pinout jest zgodny z dokumentacją producenta.
+Dokumentacja producenta: [KS0296 – docs.keyestudio.com](https://docs.keyestudio.com/projects/KS0296/en/latest/docs/KS0296.html).
+Poniższy pinout jest z nią zgodny.
 
 ![Pilot z joystickiem](../images/pilot-joystick.jpg)
 
