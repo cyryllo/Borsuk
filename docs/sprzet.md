@@ -7,7 +7,7 @@
 | BBC micro:bit V1 lub V2 | 1 | V2 zalecany (więcej pamięci, głośnik) |
 | Waveshare *Motor Driver for micro:bit* | 1 | sterownik 2 silników DC + 3 złącza serw |
 | Silnik DC z przekładnią („żółty TT”) + koło | 2 | wersja v1: 2 × serwo 360° (np. FS90R) |
-| Ultradźwiękowy czujnik odległości | 1 | **HC-SR04P** lub **RCWL-1601** (zasilanie 3,3 V), patrz niżej |
+| Ultradźwiękowy czujnik odległości | 1 | z logiką **3,3 V** (model do uzupełnienia), patrz niżej |
 | Kółko podporowe / ślizg | 1 | |
 | Koszyk na akumulatory | 1 | na wizualizacji: 2 ogniwa z tyłu robota |
 | Sklejka 3 mm | arkusz min. 160 × 370 mm | plik [`hardware/Borsuk_v2.dxf`](../hardware/Borsuk_v2.dxf) |
@@ -40,12 +40,20 @@ micro:bit wkłada się w złącze krawędziowe sterownika Waveshare. Piny są st
 | Serwo S0 (v1: lewe koło) | P0 |
 | Serwo S1 (v1: prawe koło) | P1 |
 | Serwo S2 (np. „głowa”, chwytak) | P2 |
-| Czujnik odległości TRIG / ECHO | **do wyboru**, domyślnie P1 / P2 |
+| Czujnik odległości TRIG / ECHO | wolne piny złącza płytki rozszerzeń (do uzupełnienia); w bibliotece domyślnie P1 / P2 |
 
 Wolne piny do czujników: P1, P2 (gdy nie używasz S1/S2), P5 i P11 (przyciski A/B),
 P19/P20 (I²C), a po wyłączeniu wyświetlacza (`led.enable(false)`) także P3, P4, P6, P7, P9, P10.
 
 ### Czujnik odległości – uwaga na 5 V!
+
+W robotach Borsuk używamy czujnika z logiką **3,3 V**, podłączonego do wolnych pinów
+złącza płytki rozszerzeń. Piny ustawiasz blokiem `czujnik odległości TRIG … ECHO …`
+(MicroPython: `robot.set_distance_sensor(trig, echo)`).
+
+> *Do uzupełnienia: dokładny model czujnika i numery pinów.*
+
+Jeśli kupujesz czujnik samodzielnie:
 
 Klasyczny **HC-SR04** wymaga 5 V i oddaje na pinie ECHO sygnał **5 V**, który może
 **uszkodzić micro:bita** (wejścia tolerują maks. 3,6 V). Użyj:
