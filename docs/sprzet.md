@@ -58,16 +58,25 @@ Dokumentacja producenta: [Waveshare Wiki – Motor Driver for micro:bit](https:/
 | Zasilanie serw | 5 V (stabilizator 5 V, do 3 A) |
 | Logika / micro:bit | 3,3 V (stabilizator RT9193 – płytka zasila micro:bita) |
 | Otwory montażowe | Ø3 mm (śruby M3 × 10) |
-| Wymiary | 65 × 36 mm |
+| Wymiary | 65 × 36 mm, otwory w rozstawie 57,24 × 28,7 mm |
+
+![Sterownik Waveshare – wymiary i złącza](../images/waveshare-motor-driver-wymiary.webp)
+
+*Rysunek: Waveshare. Wymiary w mm; otwory montażowe Ø3 mm w rozstawie 57,24 × 28,7 mm.*
 
 Złącza na płytce:
 
 | Złącze | Opis |
 |---|---|
-| VIN / GND | zasilanie z koszyka akumulatorów |
+| VCC / GND (zacisk śrubowy lub wtyk) | zasilanie z koszyka akumulatorów, 6–12 V |
 | A1 / A2 | silnik A (lewy) |
 | B1 / B2 | silnik B (prawy) |
-| S0 / S1 / S2 | 3-pinowe złącza serw: sygnał (P0 / P1 / P2) + **5 V** + GND |
+| S0 / S1 / S2 (z boku, GND / 5V / S) | 3-pinowe złącza serw: sygnał **P0 / P1 / P2**, zasilanie **5 V** |
+| Listwa na dole | **P0 P1 P2 P8 P12 P13 P14 P15 P16 P19 P20 GND 3V3 5V** |
+| ON / OFF | włącznik zasilania, dioda PWR |
+
+Wolne piny na dolnej listwie (niezajęte przez silniki): **P0, P1, P2, P19, P20**,
+plus zasilanie **3V3** i **5V**.
 
 ## Połączenia – robot
 
@@ -80,10 +89,11 @@ micro:bit wkłada się w złącze krawędziowe sterownika Waveshare. Piny są st
 | Serwo S0 (v1: lewe koło) | P0 |
 | Serwo S1 (v1: prawe koło) | P1 |
 | Serwo S2 (np. „głowa”, chwytak) | P2 |
-| Czujnik odległości TRIG / ECHO | dwa z wolnych złączy S0–S2 (P0 / P1 / P2); domyślnie w bibliotece P1 / P2 |
+| Czujnik odległości TRIG / ECHO | dwa wolne piny z dolnej listwy (P0, P1, P2, P19, P20); domyślnie w bibliotece P1 / P2 |
 
-Wolne piny do czujników: P1, P2 (gdy nie używasz S1/S2), P5 i P11 (przyciski A/B),
-P19/P20 (I²C), a po wyłączeniu wyświetlacza (`led.enable(false)`) także P3, P4, P6, P7, P9, P10.
+Na listwę sterownika wyprowadzone są wolne piny P0, P1, P2, P19, P20. Pozostałe piny
+micro:bita (P3–P7, P9–P11) nie są wyprowadzone na płytkę – są dostępne tylko przez złącze
+krawędziowe micro:bita.
 
 ### Czujnik odległości RCW-0001
 
@@ -93,9 +103,17 @@ Sygnały TRIG i ECHO podłącz do wolnych pinów na złączu płytki sterownika,
 ustaw te same piny blokiem `czujnik odległości TRIG … ECHO …`
 (MicroPython: `robot.set_distance_sensor(trig, echo)`).
 
-Z przodu sterownika są trzy złącza serw **S0 / S1 / S2 = P0 / P1 / P2**. W robocie v2
-(silniki DC) wszystkie są wolne i to do nich podłącza się czujnik (TRIG i ECHO do pinów
-sygnałowych dwóch złączy).
+Na dolnej listwie sterownika są wolne piny **P0, P1, P2, P19, P20** oraz **3V3** i **GND** –
+tam podłącza się czujnik:
+
+| RCW-0001 | Listwa sterownika |
+|---|---|
+| VCC | **3V3** |
+| GND | GND |
+| TRIG | wolny pin, np. P1 |
+| ECHO | wolny pin, np. P2 |
+
+Zasilanie z **3V3** jest bezpieczne – ECHO oddaje wtedy 3,3 V.
 
 **Nie wiesz, na których pinach jest czujnik?** Wgraj wykrywacz
 ([MakeCode](../examples/makecode/08-znajdz-piny-czujnika.ts) /
@@ -103,16 +121,18 @@ sygnałowych dwóch złączy).
 10–50 cm przed czujnikiem i wciśnij A. Na wyświetlaczu pojawi się np. `T0 E1 23`
 = TRIG na P0, ECHO na P1, 23 cm. Potem ustaw te piny blokiem
 `czujnik odległości TRIG … ECHO …` na początku programu
-(domyślnie biblioteka używa TRIG = P1, ECHO = P2).
+(domyślnie biblioteka używa TRIG = P1, ECHO = P2). Wykrywacz sprawdza P0, P1, P2, P19 i P20.
+
+Jeśli czujnik jest na **P19/P20** i robot ma micro:bita **V1**: te piny są tam wspólne z
+wewnętrzną magistralą I²C (akcelerometr, kompas) – pomiar może je zakłócać. Na V2 problemu nie ma.
 
 Jeśli czujnik jest na **S0 (P0)**: micro:bit V2 gra dźwięk także na P0, więc bloki
 *Muzyka* w robocie mogą zakłócać pomiar. W takim robocie nie graj melodii albo
 przełóż czujnik na S1/S2.
 
-> **Uwaga:** środkowy pin złączy serw daje **5 V**, a nie 3,3 V. Jeśli zasilasz
-> czujnik z tego złącza, sprawdź, czy jego ECHO nie oddaje 5 V (miernikiem albo w
-> dokumentacji modułu). Najbezpieczniej zasilić RCW-0001 z **3,3 V** micro:bita
-> (pin 3V na złączu krawędziowym), a ze złączy serw brać tylko sygnały i GND.
+> **Uwaga:** środkowy pin bocznych złączy serw i pin **5V** listwy dają **5 V**. Jeśli
+> czujnik jest zasilany z 5 V, sprawdź miernikiem, czy ECHO nie oddaje 5 V – micro:bit
+> toleruje maks. ok. 3,6 V. Najbezpieczniej: VCC czujnika do **3V3**.
 
 > *Do potwierdzenia: piny czujnika w robotach FabLabu (wykrywacz powyżej) i skąd jest zasilany.*
 
